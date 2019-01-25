@@ -83,18 +83,19 @@ export default {
     }
   },
   methods: {
-    song(item, id) {
+    song(item) {
+      this.currentItem = item
+    },
+    dblsong(item, id) {
       $.get('/song/url', { id }, (res) => {
         // window.store.songinfo = res.data // eslint-disable-line
         window.store.singerData = item
         window.store.audio.src = res.data[0].url
+        window.store.audio.autoplay = true
+        window.store.tabplay = false
       })
-      this.currentItem = item
     },
-    dblsong() {
-      window.store.audio.autoplay = true
-      window.store.tabplay = false
-    },
+
   },
 }
 </script>
@@ -142,6 +143,7 @@ export default {
         background: #f4f4f6;
       }
       &.active {
+        background: #ceced6;
         .icon-bofang1,
         .icon-gengduosandian, {
           display: block;
