@@ -141,7 +141,8 @@
               v-for="item of store.storage.getItem"
               :key="item.id"
               class="item"
-              :class="{active:store.singerData.id === item.id}"
+              :class="{active:store.singerData.id === item.id , click:currentTime === item}"
+              @click="clicksong(item)"
               @dblclick="dblsong(item,item.id)"
             >
               <dir
@@ -153,13 +154,24 @@
                 class="name"
                 :title="item.name"
               >
-                {{ item.name }}
+                <p class="grow">
+                  {{ item.name }}
+                </p>
+                <span
+                  class="iconfont icon-bofang1"
+                  @click="dblsong(item , item.id)"
+                />
+                <span class="iconfont icon-yuanquananniu" />
+                <span class="iconfont icon-gengduosandian" />
               </div>
               <div class="singer">
                 {{ item.artists[0].name }}
               </div>
               <div class="time">
                 {{ item.duration | totalTime }}
+              </div>
+              <div class="clear">
+                <span class="iconfont icon-yuanquan-cha" />
               </div>
             </div>
           </div>
@@ -205,6 +217,7 @@ export default {
       flag: false,
       curflag: true,
       playsbox: false,
+      currentTime: '',
     }
   },
   mounted() {
@@ -270,6 +283,9 @@ export default {
     // 关闭播放列表
     shut() {
       this.playsbox = false
+    },
+    clicksong(item) {
+      this.currentTime = item
     },
     dblsong(item, id) {
       window.actions.play(item, id)
@@ -392,10 +408,9 @@ export default {
                  right: 0;
                  bottom: 50px;
                  width: 500px;
-                 height: 600px;
+                 height: 550px;
                  border: 1px solid #e5e5e5;
                  background: #fff;
-                 overflow-x: auto;
                 > .top {
                     height: 50px;
                     display: flex;
@@ -426,6 +441,8 @@ export default {
                     }
                  }
                 > .bottom {
+                    height: 500px;
+                    overflow-x: auto;
                      >.item.active {
                          .icon,.name,.singer,.time {
                             color: #bc2f2d;
@@ -439,27 +456,73 @@ export default {
                         line-height: 50px;
                         display: flex;
                         cursor: pointer;
+                        .icon-bofang1,
+                        .icon-yuanquananniu,
+                        .icon-gengduosandian,
+                        .icon-yuanquan-cha {
+                            display: none
+                        }
                         &:nth-child(odd) {
-                        background: #f4f4f6;
-                    }
+                            background: #f9f9f9;
+                        }
+                        &:hover {
+                            background: #f2f2f3;
+                        }
                         .icon {
                             visibility: hidden;
                             width: 8%;
                             text-align: center;
                         }
+                        &.click {
+                            background: #dedee0;
+                             animation: textshake 0.5s;
+                            .icon-bofang1,
+                            .icon-yuanquananniu,
+                            .icon-gengduosandian,
+                            .icon-yuanquan-cha {
+                                display: block;
+                            }
+                            @keyframes textshake {
+                              0% {
+                                transform: translateX(0px)
+                              }
+                              50% {
+                                transform: translateX(3px)
+                              }
+                              100% {
+                                transform: translateX(0px)
+                              }
+                            }
+                        }
                         .name {
                             width:47%;
                             font-size: 16px;
-                            padding-right: 20px;
-                            .omit-sandian
+                            display: flex;
+                            .grow {
+                                .omit-sandian;
+                                margin-right: 10px;
+                                flex-grow: 1;
+                            }
+                            .iconfont {
+                                margin-right: 10px;
+                                font-size: 20px;
+                            }
                         }
                         .singer {
-                            width: 30%;
+                            width: 25%;
                             color: #999999;
                             font-size: 14px;
                         }
                         .time {
-                            width: 15px;
+                            width: 8%;
+                        }
+                        .clear {
+                            width: 12%;
+                            text-align: center;
+                            .iconfont {
+                                font-size: 20px;
+                            }
+
                         }
                     }
                 }

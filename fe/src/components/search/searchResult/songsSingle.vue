@@ -28,7 +28,7 @@
         <li
           v-for="item of result"
           :key="item.id"
-          :class="{active:currentItem === item , currentplay:currentplay === item}"
+          :class="{active:currentItem === item , currentplay:store.singerData === item}"
           @click="song(item,item.id)"
           @dblclick="dblsong(item,item.id )"
         >
@@ -98,6 +98,7 @@ export default {
   },
   data() {
     return {
+      store: window.store,
       currentItem: null,
       currentplay: null,
     }
@@ -107,7 +108,6 @@ export default {
       this.currentItem = item
     },
     dblsong(item, id) {
-      this.currentplay = item
       window.actions.play(item, id)
     },
 
