@@ -22,6 +22,10 @@ window.actions = {
     }
     if (plays.findIndex(value => value.id === item.id) === -1) plays.push(item)
     localStorage.setItem('plays', JSON.stringify(plays))
+
+    const getres = localStorage.getItem('plays')
+    if (!getres) return
+    window.store.storage.getItem = JSON.parse(getres)
   },
 }
 window.store = {
@@ -30,6 +34,9 @@ window.store = {
   audio: null,
   tabplay: true,
   playsbox: true,
+  storage: {
+    gitItem: null,
+  },
 }
 
 Vue.config.productionTip = false

@@ -138,10 +138,11 @@
             class="bottom"
           >
             <div
-              v-for="item of plays"
+              v-for="item of store.storage.getItem"
               :key="item.id"
               class="item"
               :class="{active:store.singerData.id === item.id}"
+              @dblclick="dblsong(item,item.id)"
             >
               <dir
                 class="icon"
@@ -203,7 +204,6 @@ export default {
       dowmX: '',
       flag: false,
       curflag: true,
-      plays: [],
       playsbox: false,
     }
   },
@@ -262,9 +262,6 @@ export default {
     // 切换播放列表
     playList() {
       this.playsbox = !this.playsbox
-      const res = localStorage.getItem('plays')
-      if (!res) return
-      this.plays = JSON.parse(res)
     },
     // 清除缓存
     clearSorage() {
@@ -273,6 +270,9 @@ export default {
     // 关闭播放列表
     shut() {
       this.playsbox = false
+    },
+    dblsong(item, id) {
+      window.actions.play(item, id)
     },
   },
 }
