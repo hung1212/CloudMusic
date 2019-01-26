@@ -83,8 +83,18 @@ export default {
     },
   },
   props: {
-    result: Array,
-    artist: Array,
+    result: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
+    artist: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
   },
   data() {
     return {
@@ -97,6 +107,7 @@ export default {
       this.currentItem = item
     },
     dblsong(item, id) {
+      this.currentplay = item
       window.actions.play(item, id)
     },
 
@@ -146,6 +157,7 @@ export default {
       // line-height: 60px;
       // height: 60px;
       padding: 20px;
+      font-size: 14px;
       cursor: pointer;
       &:hover,
       &:nth-child(odd):hover {
@@ -161,7 +173,7 @@ export default {
         background: #ceced6;
         div {
           p {
-            animation: textshake 0.5s;
+            animation: textshake 1s;
           }
         }
         @keyframes textshake {

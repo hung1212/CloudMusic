@@ -30,7 +30,8 @@
         @click="play"
       />
       <span
-        class="iconfont icon-048caozuo_xiayishou qh"
+        class="iconfont icon-048caozuo_xiayishou qh
+"
       />
     </div>
     <div
@@ -62,7 +63,7 @@
       <div
         class="progressPD"
 
-        @click=" ur"
+        @click="clickBur"
       >
         <div
           ref="bur"
@@ -95,8 +96,73 @@
       <div class="volume">
         <span class="iconfont icon-yinliang" />
       </div>
-      <div class="playList">
-        <span class="iconfont icon-icon" />
+      <div
+        class="playList"
+      >
+        <div
+          class="control-plays"
+          @click="playList"
+        >
+          <span
+            class="iconfont icon-icon"
+          />
+        </div>
+        <div
+          v-if="playsbox"
+          class="playList-box"
+        >
+          <div class="top">
+            <h4>播放列表</h4>
+            <p class="collect-all">
+              <span class="iconfont icon-tianjiawenjian" />
+              收藏全部
+            </p>
+            <p class="wire" />
+            <p
+              class="clearSorage"
+              @click="clearSorage"
+            >
+              <span class="iconfont icon-shanchu" />
+              清空
+            </p>
+
+            <div
+              class="close"
+              @click="shut"
+            >
+              ×
+            </div>
+          </div>
+          <div
+
+            class="bottom"
+          >
+            <div
+              v-for="item of plays"
+              :key="item.id"
+              class="item"
+              :class="{active:store.singerData.id === item.id}"
+            >
+              <dir
+                class="icon"
+              >
+                <span class="iconfont icon-bofang" />
+              </dir>
+              <div
+                class="name"
+                :title="item.name"
+              >
+                {{ item.name }}
+              </div>
+              <div class="singer">
+                {{ item.artists[0].name }}
+              </div>
+              <div class="time">
+                {{ item.duration | totalTime }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div
@@ -137,6 +203,8 @@ export default {
       dowmX: '',
       flag: false,
       curflag: true,
+      plays: [],
+      playsbox: false,
     }
   },
   mounted() {
@@ -186,17 +254,36 @@ export default {
     },
     // 只要进度条发生改变,当前时间也改变
     clickBur(e) {
-      if (e.target !== this.$refs.dian) {
+      if (e.target === this.$refs.dian) return
         window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left) / this.$refs.bur.offsetWidth * this.store.audio.duration // eslint-disable-line
-        this.store.tabplay = false
-        this.store.audio.play()
-      }
+      this.store.tabplay = false
+      this.store.audio.play()
+    },
+    // 切换播放列表
+    playList() {
+      this.playsbox = !this.playsbox
+      const res = localStorage.getItem('plays')
+      if (!res) return
+      this.plays = JSON.parse(res)
+    },
+    // 清除缓存
+    clearSorage() {
+      localStorage.clear('plays')
+    },
+    // 关闭播放列表
+    shut() {
+      this.playsbox = false
     },
   },
 }
 </script>
 
 <style lang="less" scoped>
+    .omit-sandian {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     .player {
         background: #fff;
         border-top: 1px solid #ccc;
@@ -241,6 +328,7 @@ export default {
           }
         }
         .info {
+            margin-right:30px;
           flex: 1;
           .song {
             display: flex;
@@ -287,9 +375,96 @@ export default {
           }
         }
         .caozuo {
-          width: 300px;
+          width: 270px;
           display: flex;
           justify-content: space-around;
+          line-height: 50px;
+          > div {
+              flex: 1;
+          }
+          > .playList {
+              .control-plays {
+                  width: 100%;
+                  height: 100%
+              }
+             > .playList-box {
+                 position: fixed;
+                 right: 0;
+                 bottom: 50px;
+                 width: 500px;
+                 height: 600px;
+                 border: 1px solid #e5e5e5;
+                 background: #fff;
+                 overflow-x: auto;
+                > .top {
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    border-bottom: 1px solid #ccc;
+                    > h4 {
+                        flex-grow: 1;
+                        font-weight: 400;
+                        font-size: 16px;
+                        margin-left: 40px;
+                    }
+                    > .collect-all {
+                        cursor: pointer;
+                    }
+                    > .wire {
+                        margin: 0 20px;
+                        height: 14px;
+                        width: 1px;
+                        background: #ccc;
+                    }
+                    > .clearSorage {
+                        cursor: pointer;
+                    }
+                    > .close {
+                        margin:0 27px;
+                        font-size: 24px;
+                        cursor: pointer;
+                    }
+                 }
+                > .bottom {
+                     >.item.active {
+                         .icon,.name,.singer,.time {
+                            color: #bc2f2d;
+                         }
+                         .icon {
+                             visibility:initial
+                         }
+                     }
+                    .item {
+                        height: 50px;
+                        line-height: 50px;
+                        display: flex;
+                        cursor: pointer;
+                        &:nth-child(odd) {
+                        background: #f4f4f6;
+                    }
+                        .icon {
+                            visibility: hidden;
+                            width: 8%;
+                            text-align: center;
+                        }
+                        .name {
+                            width:47%;
+                            font-size: 16px;
+                            padding-right: 20px;
+                            .omit-sandian
+                        }
+                        .singer {
+                            width: 30%;
+                            color: #999999;
+                            font-size: 14px;
+                        }
+                        .time {
+                            width: 15px;
+                        }
+                    }
+                }
+              }
+          }
         }
     }
 </style>

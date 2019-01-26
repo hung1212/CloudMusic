@@ -87,6 +87,12 @@ export default {
       color: #cdcdce;
       position: relative;
       background: #fff;
+      max-width: 500px;
+      p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
           &:before {
           content: "";
           width: 0;

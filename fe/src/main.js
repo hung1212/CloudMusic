@@ -14,6 +14,14 @@ window.actions = {
       window.store.audio.autoplay = true
       window.store.tabplay = false
     })
+
+    const res = localStorage.getItem('plays')
+    let plays = []
+    if (res) {
+      plays = JSON.parse(res)
+    }
+    if (plays.findIndex(value => value.id === item.id) === -1) plays.push(item)
+    localStorage.setItem('plays', JSON.stringify(plays))
   },
 }
 window.store = {
@@ -21,6 +29,7 @@ window.store = {
   songinfo: [],
   audio: null,
   tabplay: true,
+  playsbox: true,
 }
 
 Vue.config.productionTip = false
