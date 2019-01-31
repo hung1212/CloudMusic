@@ -46,12 +46,14 @@ export default {
   },
   methods: {
     deleteStorage(item) {
-      this.hots.forEach((element, index, array) => {
-        if (item === element) {
-          array.splice(index, 1)
-          localStorage.setItem('hots', JSON.stringify(array))
-        }
-      })
+      // this.hots.forEach((element, index, array) => {
+      //   if (item === element) {
+      //     array.splice(index, 1)
+      //     localStorage.setItem('hots', JSON.stringify(array))
+      //   }
+      // })
+      this.hots.splice(this.hots.indexOf(item), 1)
+      localStorage.setItem('hots', JSON.stringify(this.hots))
     },
     deleteAll() {
       if (window.confirm('清除所有历史记录?')) {

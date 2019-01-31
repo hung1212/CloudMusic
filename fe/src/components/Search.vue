@@ -116,7 +116,7 @@ export default {
 <style lang="less" scoped>
 .search {
   width: 800px;
-  margin: 50px auto;
+  margin: 10px auto 70px;
   .searchbox {
     width: 100%;
     height: 40px;
