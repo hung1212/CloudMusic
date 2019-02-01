@@ -93,8 +93,9 @@ export default {
   filters: {
     curTime(time) {
       if (!window.store.audio) return '00:00'
-      if (!window.store.audio.duration) return '00:00'
-      const store = (time / 1000) * (window.store.audio.currentTime / window.store.audio.duration)
+      if (!window.store.songInfo.dt) return '00:00'
+      // eslint-disable-next-line
+      const store = (time / 1000) * (window.store.audio.currentTime * 1000 / window.store.songInfo.dt)
       const m = String(Math.floor((store / 60) / 10)) + String(Math.floor((store / 60) % 10))
       const s = String(Math.floor((store % 60) / 10)) + String(Math.floor(store % 60 % 10))
       return `${m}:${s}`
@@ -114,6 +115,7 @@ export default {
       flag: false,
       curflag: true,
       currentTime: '',
+      ratio: '',
     }
   },
   methods: {
@@ -132,24 +134,31 @@ export default {
       // eslint-disable-next-line max-len
       const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.dowmX
       this.store.audioData.width = `${moveX / this.$refs.bur.offsetWidth * 100}%`
-      const ratio = moveX / this.$refs.bur.offsetWidth
+      this.ratio = moveX / this.$refs.bur.offsetWidth
 
       this.store.tabplay = false
       this.store.audio.play()
 
       if (moveX > this.$refs.bur.offsetWidth) this.up()
-      window.store.audio.currentTime = window.store.audio.duration * ratio
     },
     up() {
       this.flag = false
       this.store.audioData.curflag = true
+      window.store.audio.currentTime = window.store.songInfo.dt / 1000 * this.ratio
     },
 
     // // 只要进度条发生改变,当前时间也改变
     clickBar(e) {
       if (e.target === this.$refs.dian) return
-      window.actions.play(this.store.songInfo)
-      if (this.store.audioData.flagAudio) {window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left) / this.$refs.bur.offsetWidth * this.store.audio.duration} // eslint-disable-line
+      if (this.store.audio.autoplay) {
+        window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left)
+        / this.$refs.bur.offsetWidth * window.store.songInfo.dt / 1000
+      } else {
+        window.actions.play(this.store.songInfo, () => {
+          // eslint-disable-next-line
+           window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left) / this.$refs.bur.offsetWidth * window.store.songInfo.dt/1000
+        })
+      }
     },
   },
 }

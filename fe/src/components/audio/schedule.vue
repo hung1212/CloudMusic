@@ -126,8 +126,26 @@
     <div class="like">
       <span class="iconfont icon-xihuan" />
     </div>
-    <div class="schema">
-      <span class="iconfont icon-moshiqiehuan" />
+    <div
+      class="schema"
+      @click="schema"
+    >
+      <span
+        v-if="store.audioData.schema === 1"
+        class="iconfont icon-moshiqiehuan"
+      />
+      <span
+        v-if="store.audioData.schema === 2"
+        class="iconfont icon-danquxunhuan"
+      />
+      <span
+        v-if="store.audioData.schema === 3"
+        class="iconfont icon-suijibofang"
+      />
+      <span
+        v-if="store.audioData.schema === 4"
+        class="iconfont icon-bofangliebiao"
+      />
     </div>
     <div class="volume">
       <span class="iconfont icon-yinliang" />
@@ -166,6 +184,7 @@
 
           <div
             class="close"
+            @click="shut"
           >
             ×
           </div>
@@ -181,78 +200,6 @@
           </div>
         </div>
       </div>
-      <!-- <div
-        v-else
-        class="playList-box"
-      >
-        <div class="top">
-          <h4>播放列表</h4>
-          <p class="collect-all">
-            <span class="iconfont icon-tianjiawenjian" />
-            收藏全部
-          </p>
-          <p class="wire" />
-          <p
-            class="clearSorage"
-            @click="clearSorage"
-          >
-            <span class="iconfont icon-shanchu" />
-            清空
-          </p>
-
-          <div
-            class="close"
-            @click="shut"
-          >
-            ×
-          </div>
-        </div>
-        <div
-
-          class="bottom"
-        >
-          <div
-            v-for="(item,index) of store.storage.playList"
-            :key="item.id"
-            class="item"
-            :class="{active:playTime === item , click:currentTime === item}"
-            @click="clicksong(item)"
-            @dblclick="dblsong(item)"
-          >
-            <dir
-              class="icon"
-            >
-              <span class="iconfont icon-bofang" />
-            </dir>
-            <div
-              class="name"
-              :title="item.name"
-            >
-              <p class="grow">
-                {{ item.name }}
-              </p>
-              <span
-                class="iconfont icon-bofang1"
-                @click="dblsong(item)"
-              />
-              <span class="iconfont icon-yuanquananniu" />
-              <span class="iconfont icon-gengduosandian" />
-            </div>
-            <div class="singer">
-              {{ item.artists[0].name }}
-            </div>
-            <div class="time">
-              {{ item.duration | totalTime }}
-            </div>
-            <div class="clear">
-              <span
-                class="iconfont icon-yuanquan-cha"
-                @click="deleteStorage(item,index)"
-              />
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -298,10 +245,12 @@ export default {
     },
     // 清除缓存
     clearSorage() {
+      if (!window.confirm('确定要清空播放列表')) return
       localStorage.removeItem('playList')
+      this.store.audio.pause()
       this.store.storage.playList = []
       this.store.songInfo = null
-      this.store.audioData.src = ''
+      this.store.audio.src = ''
       this.store.audioData.tabplay = true
     },
     // 关闭播放列表
@@ -312,6 +261,7 @@ export default {
       this.currentTime = item
     },
     dblsong(item) {
+      if (!this.store.songInfo) return
       this.playTime = item
       window.actions.play(item)
       window.actions.songInfo(item)
@@ -319,8 +269,16 @@ export default {
     deleteStorage(item, i) {
       window.actions.playsDelete('plays', i)
       if (item.id === this.store.songInfo.id) {
-        window.actions.play(this.store.storage.playList[0])
-        window.actions.songInfo(this.store.storage.playList[0])
+        if (this.store.audioData.schema === 1) window.actions.next()
+        if (this.store.storage.playList.length > 0) {
+          window.actions.play(this.store.storage.playList[0])
+          window.actions.songInfo(this.store.storage.playList[0])
+        } else {
+          this.store.storage.playList = []
+          this.store.songInfo = null
+          this.store.audio.src = ''
+          this.store.audioData.tabplay = true
+        }
       }
     },
   },
