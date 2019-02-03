@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import jquery from 'jquery'
 import App from './App.vue'
+import router from './router'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
+// import VueRouter from 'vue-router'
 // import 'font-awesome/scss/font-awesome.scss'
 window.$ = jquery
 window.alert = function alert(content) {
@@ -19,14 +21,36 @@ window.alert = function alert(content) {
 window.actions = {
   play(item, cb) {
     $.get('/song/url', { id: item.id }, (res) => {
+      // 获取歌曲url
       window.store.audioData.src = res.data[0].url
       window.store.audio.src = window.store.audioData.src
       window.store.audio.play()
       window.store.audioData.tabplay = false
       window.store.audioData.flagAudio = true
+      window.store.disk = true
       if (cb) {
         cb()
       }
+    })
+    // 获取歌曲歌词
+    $.get('/lyric', { id: item.id }, (res) => {
+      function timeMsec(a) {
+        const min = a.slice(1, 3) * 60000
+        const sec = a.slice(4, 6) * 1000
+        const msec = a.slice(7) * 1
+        const time = min + sec + msec
+        return time
+      }
+      window.store.lyric = res.lrc.lyric.split('\n')
+      window.store.lyric.forEach((ele, i, arr) => {
+        const obj = {}
+        const a = ele.split(']')
+        const time = timeMsec(a[0])
+        obj.time = time
+        obj.lrc = a[1]
+        obj.index = i
+        arr[i] = obj
+      })
     })
     const playList = window.store.storage.playList
     if (playList.findIndex(value => value.id === item.id) === -1) {
@@ -146,6 +170,9 @@ window.store = {
   audio: null,
   // singerData: null,
   songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
+  lyric: null, // 歌词
+  currentLrc: {}, // 当前显示的一句歌词
+  disk: false, // 歌词的圆盘动画效果
   audioData: {
     curflag: true,
     width: null,
@@ -163,5 +190,6 @@ window.store = {
 
 Vue.config.productionTip = false
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')

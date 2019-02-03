@@ -1,13 +1,14 @@
 <template>
-  <div
+  <router-link
     v-if="store.storage.playList.length > 0 && store.songInfo"
+    to="/Lyric"
     class="img"
   >
     <img
       :src="store.songInfo.al.picUrl"
       alt="stort"
     >
-  </div>
+  </router-link>
   <div
     v-else
     class="img-hidde img"

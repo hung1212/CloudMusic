@@ -33,10 +33,12 @@ export default {
       if (this.store.storage.playList.length === 0) return
       if (this.store.audioData.tabplay) {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
-        window.actions.play(this.store.songInfo)
+        if (this.store.audioData.src) this.store.audio.play()
+        else window.actions.play(this.store.songInfo)
       } else {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
         this.store.audio.pause()
+        this.store.disk = false
       }
     },
     next() {

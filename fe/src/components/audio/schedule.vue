@@ -243,16 +243,6 @@ export default {
     playList() {
       this.playsbox = !this.playsbox
     },
-    // 清除缓存
-    clearSorage() {
-      if (!window.confirm('确定要清空播放列表')) return
-      localStorage.removeItem('playList')
-      this.store.audio.pause()
-      this.store.storage.playList = []
-      this.store.songInfo = null
-      this.store.audio.src = ''
-      this.store.audioData.tabplay = true
-    },
     // 关闭播放列表
     shut() {
       this.playsbox = false
@@ -265,6 +255,16 @@ export default {
       this.playTime = item
       window.actions.play(item)
       window.actions.songInfo(item)
+    },
+    // 清除缓存
+    clearSorage() {
+      if (!window.confirm('确定要清空播放列表')) return
+      localStorage.removeItem('playList')
+      this.store.audio.pause()
+      this.store.storage.playList = []
+      this.store.songInfo = null
+      this.store.audio.src = ''
+      this.store.audioData.tabplay = true
     },
     deleteStorage(item, i) {
       window.actions.playsDelete('plays', i)
