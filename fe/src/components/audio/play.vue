@@ -30,6 +30,7 @@ export default {
       window.actions.previous()
     },
     play() {
+      this.store.disk = false
       if (this.store.storage.playList.length === 0) return
       if (this.store.audioData.tabplay) {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
@@ -38,7 +39,6 @@ export default {
       } else {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
         this.store.audio.pause()
-        this.store.disk = false
       }
     },
     next() {

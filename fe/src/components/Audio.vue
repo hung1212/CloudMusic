@@ -39,6 +39,7 @@ export default {
       // 只要播放事件在改变,进度条就改变
       if (!window.store.audioData.curflag) return
       if (!this.store.songInfo) return
+      this.store.disk = true
       this.store.audioData.width = `${this.store.audio.currentTime * 1000 / window.store.songInfo.dt * 100}%`
       this.store.currentLrc = this.store.lyric.find((ele, i, arr) => {
         if (i === arr.length - 1) return ele

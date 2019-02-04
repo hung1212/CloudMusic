@@ -40,13 +40,25 @@
         </div>
       </div>
     </div>
-    <div class="bottom" />
+    <div class="bottom">
+      <comment />
+      <div class="right">
+        <silrc class="silrc" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import comment from './lyric/comment.vue'
+import silrc from './lyric/silrc.vue'
+
 export default {
   name: 'Lyric',
+  components: {
+    comment,
+    silrc,
+  },
   data() {
     return {
       store: window.store,
@@ -72,13 +84,13 @@ export default {
              background-position:-223px -918px;
              position: relative;
              &.diskmove {
-                animation: disk 15000s infinite;
-               @keyframes disk {
+                animation: disk 10s linear infinite;
+                @keyframes disk {
                  0% {
 
                  }
                  100% {
-                  transform: rotateZ(360000deg)
+                  transform: rotateZ(360deg)
                  }
                }
              }
@@ -123,6 +135,13 @@ export default {
                }
              }
            }
+         }
+       }
+       .bottom {
+         display: flex;
+         .right {
+           width: 300px;
+           margin-left: 50px;
          }
        }
     }
