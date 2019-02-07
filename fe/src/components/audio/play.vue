@@ -30,7 +30,6 @@ export default {
       window.actions.previous()
     },
     play() {
-      this.store.disk = false
       if (this.store.storage.playList.length === 0) return
       if (this.store.audioData.tabplay) {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
@@ -38,6 +37,8 @@ export default {
         else window.actions.play(this.store.songInfo)
       } else {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
+        this.store.lrc.diskFalse = false
+        this.store.lrc.disk = false
         this.store.audio.pause()
       }
     },

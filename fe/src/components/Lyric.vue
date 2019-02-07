@@ -1,49 +1,54 @@
 <template>
-  <div class="main">
-    <div class="top">
-      <div class="left">
-        <div
-          class="disk"
-          :class="{ diskmove:store.disk}"
-        >
-          <img
-            :src="store.songInfo.al.picUrl"
-            alt=""
+  <div class="bg">
+    <div class="main">
+      <div class="top">
+        <div class="left">
+          <div
+            class="disk"
+            :class="{ diskmove:store.lrc.disk}"
           >
+            <img
+              :src="store.songInfo.al.picUrl"
+              alt=""
+            >
+          </div>
+        </div>
+        <div class="right">
+          <h4>{{ store.songInfo.name }}</h4>
+          <div class="intro">
+            <p class="album">
+              专辑: <a href="##">
+                {{ store.songInfo.al.name }}
+              </a>
+            </p>
+            <p class="album">
+              歌手: <a href="##">
+                {{ store.songInfo.ar[0].name }}
+              </a>
+            </p>
+            <p class="album">
+              来源: <a href="##" />
+            </p>
+          </div>
+          <div
+            ref="lrc"
+            class="lrc"
+          >
+            <p
+              v-for="(value , index) of store.lrc.lyric"
+              :key="index"
+              :class="{active:index === store.lrc.currentLrc.index}"
+            >
+              {{ value.lrc }}
+            </p>
+          </div>
         </div>
       </div>
-      <div class="right">
-        <h4>{{ store.songInfo.name }}</h4>
-        <div class="intro">
-          <p class="album">
-            专辑: <a href="##">
-              {{ store.songInfo.al.name }}
-            </a>
-          </p>
-          <p class="album">
-            歌手: <a href="##">
-              {{ store.songInfo.ar[0].name }}
-            </a>
-          </p>
-          <p class="album">
-            来源: <a href="##" />
-          </p>
+      <div class="bottom">
+        <comment />
+        <div class="right">
+          <silrc class="silrc" />
         </div>
-        <div class="lrc">
-          <p
-            v-for="(value , index) of store.lyric"
-            :key="index"
-            :class="{active:index === store.currentLrc.index}"
-          >
-            {{ value.lrc }}
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="bottom">
-      <comment />
-      <div class="right">
-        <silrc class="silrc" />
       </div>
     </div>
   </div>
@@ -64,15 +69,24 @@ export default {
       store: window.store,
     }
   },
+  watch: {
+    'store.lrc.currentLrc': function () {
+      this.$refs.lrc.scrollTop += 34
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
+.bg {
+  background: #d7d8d9;
+}
     .main {
        width: 1000px;
-       margin:50px auto 100px;
+       margin:0 auto;
+       padding: 50px 0 100px 0;
        .top {
-        background: rgba(137,135,131,0.2);
+        background: #697a83;
         display: flex;
          .left {
            padding-top:20px;

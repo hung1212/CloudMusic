@@ -39,18 +39,26 @@ export default {
       // 只要播放事件在改变,进度条就改变
       if (!window.store.audioData.curflag) return
       if (!this.store.songInfo) return
-      this.store.disk = true
+      if (!this.store.lrc.lyric) return
+      if (this.store.lrc.diskFalse) this.store.lrc.disk = true
+      this.store.lrc.diskFalse = true
       this.store.audioData.width = `${this.store.audio.currentTime * 1000 / window.store.songInfo.dt * 100}%`
-      this.store.currentLrc = this.store.lyric.find((ele, i, arr) => {
-        if (i === arr.length - 1) return ele
-        return this.store.audio.currentTime * 1000 < arr[i + 1].time
+      this.store.lrc.currentLrc = this.store.lrc.lyric.find((ele, i, arr) => {
+        let flag = true
+        console.log(i, arr.length - 1)
+        if (i === arr.length - 2) {
+          console.log(ele)
+          flag = false
+          return ele
+        }
+        if (flag) { return this.store.audio.currentTime * 1000 <= arr[i + 1].time }
       })
       if (this.store.audio.ended) {
         if (this.store.audioData.schema === 2) {
           this.store.audio.currentTime = 0
           this.store.audio.play()
         } else {
-          this.store.disk = false
+          this.store.lrc.disk = false
           window.actions.next()
         }
       }

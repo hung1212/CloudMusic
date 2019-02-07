@@ -17,7 +17,7 @@
       </div>
       <div class="content">
         <div
-          v-for="(item) of commentData.hotComments"
+          v-for="(item) of hotCommentsData"
           :key="item.commentId"
           class="a"
         >
@@ -132,6 +132,29 @@
         </div>
       </div>
     </div>
+    <div class="total-page">
+      <button @click="tabPage(1)">
+        首页
+      </button>
+      <button @click="tabPage(page-1)">
+        上一页
+      </button>
+      <button
+        v-for="index of totalPage"
+        v-if="index>=viewPage.start&&index<=viewPage.end"
+        :key="index"
+        :class="{current:index === page}"
+        @click="tabPage(index)"
+      >
+        {{ index }}
+      </button>
+      <button @click="tabPage(page+1)">
+        下一页
+      </button>
+      <button @click="tabPage(totalPage)">
+        末页
+      </button>
+    </div>
   </div>
 </template>
 
@@ -150,22 +173,54 @@ export default {
   data() {
     return {
       store: window.store,
+      hotCommentsData: '',
       commentData: '',
+      page: 1,
+      limit: 10,
+      totalPage: '',
     }
+  },
+  computed: {
+    viewPage() {
+      let start = 0
+      let end = 0
+      start = this.page - 3
+      end = this.page + 3
+      if (start < 1) end += 1 - start
+      if (end > this.totalPage) start -= end - this.totalPage
+      return {
+        start,
+        end,
+      }
+    },
   },
   watch: {
     'store.songInfo': function () {
-      this.comment()
+      this.hotComment()
+      this.comments(this.page)
     },
   },
   mounted() {
-    this.comment()
+    this.hotComment()
+    this.comments(this.page)
   },
   methods: {
-    comment() {
+    hotComment() {
       $.get('/comment/music', { id: this.store.songInfo.id }, (res) => {
-        this.commentData = res
+        this.hotCommentsData = res.hotComments
+        if (this.hotCommentsData.length > 9) this.hotCommentsData.length = 10
       })
+    },
+    comments(page) {
+      $.get('/comment/music', { id: this.store.songInfo.id, limit: this.limit, offset: (page - 1) * this.limit }, (res) => {
+        this.commentData = res
+        this.totalPage = Math.ceil(res.total / this.limit)
+      })
+    },
+    tabPage(index) {
+      if (index < 1 || index > this.totalPage) return
+      this.page = index
+      this.comments(this.page)
     },
   },
 }
@@ -183,6 +238,7 @@ export default {
         padding-right: 20px;
         .pl {
             line-height: 26px;;
+            font-size: 12px;
             span {
                 color: #477aac;
                 padding: 3px;
@@ -193,7 +249,6 @@ export default {
             }
         }
         .view {
-            margin-top: 8px;
             color: #929292;
             display: flex;
             justify-content:space-between;
@@ -272,13 +327,25 @@ export default {
                             }
                         }
                         .pl {
-                            margin-top: 10px;
+                            margin: 10px 0;
                             padding: 10px;
                             background: #d2d0d1;
                         }
                     }
 
                 }
+            }
+        }
+        .total-page {
+            margin:20px 0 0 0;
+            display: flex;
+            justify-content: center;
+            button {
+                padding:5px 7px;
+                margin: 0 1px;
+            }
+            .current {
+                background: #fff;
             }
         }
     }

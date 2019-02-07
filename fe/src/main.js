@@ -27,11 +27,18 @@ window.actions = {
       window.store.audio.play()
       window.store.audioData.tabplay = false
       window.store.audioData.flagAudio = true
-      window.store.disk = true
       if (cb) {
         cb()
       }
     })
+    window.actions.lyric(item)
+    const playList = window.store.storage.playList
+    if (playList.findIndex(value => value.id === item.id) === -1) {
+      playList.unshift(item)
+    }
+    localStorage.playList = JSON.stringify(window.store.storage.playList)
+  },
+  lyric(item) {
     // 获取歌曲歌词
     $.get('/lyric', { id: item.id }, (res) => {
       function timeMsec(a) {
@@ -41,22 +48,17 @@ window.actions = {
         const time = min + sec + msec
         return time
       }
-      window.store.lyric = res.lrc.lyric.split('\n')
-      window.store.lyric.forEach((ele, i, arr) => {
+      window.store.lrc.lyric = res.lrc.lyric.split('\n')
+      window.store.lrc.lyric.forEach((ele, i, array) => {
         const obj = {}
         const a = ele.split(']')
         const time = timeMsec(a[0])
         obj.time = time
         obj.lrc = a[1]
         obj.index = i
-        arr[i] = obj
+        array[i] = obj
       })
     })
-    const playList = window.store.storage.playList
-    if (playList.findIndex(value => value.id === item.id) === -1) {
-      playList.unshift(item)
-    }
-    localStorage.playList = JSON.stringify(window.store.storage.playList)
   },
   playsDelete(arr, i) {
     window.store.storage.playList.splice(i, 1)
@@ -170,9 +172,12 @@ window.store = {
   audio: null,
   // singerData: null,
   songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
-  lyric: null, // 歌词
-  currentLrc: {}, // 当前显示的一句歌词
-  disk: false, // 歌词的圆盘动画效果
+  lrc: {
+    lyric: null, // 歌词
+    currentLrc: {}, // 当前显示的一句歌词
+    disk: false, // 歌词的圆盘动画效果
+    diskFalse: true,
+  },
   audioData: {
     curflag: true,
     width: null,

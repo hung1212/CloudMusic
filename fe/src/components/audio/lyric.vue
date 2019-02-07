@@ -1,7 +1,7 @@
 <template>
   <router-link
     v-if="store.storage.playList.length > 0 && store.songInfo"
-    to="/Lyric"
+    :to="$route.name === 'Lyric' ? '/' : '/lyric'"
     class="img"
   >
     <img
