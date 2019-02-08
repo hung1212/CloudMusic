@@ -14,7 +14,7 @@
       />
     </div>
     <div
-      class="show"
+      class="auto"
     >
       <search-result
         v-if="cut"
@@ -115,8 +115,8 @@ export default {
 
 <style lang="less" scoped>
 .search {
-  width: 800px;
-  margin: 10px auto 70px;
+  padding: 20px 25px;
+  flex:1;
   .searchbox {
     width: 100%;
     height: 40px;
@@ -139,12 +139,9 @@ export default {
       cursor: pointer;
     }
   }
-  .show {
-    .searchdata {
-      display: flex;
-      justify-content: space-between;
-    }
+  .searchdata {
+    display: flex;
+    justify-content: space-between;
   }
-
 }
 </style>

@@ -50,9 +50,9 @@ window.actions = {
       }
       window.store.lrc.lyric = res.lrc.lyric.split('\n')
       window.store.lrc.lyric.forEach((ele, i, array) => {
-        const obj = {}
         const a = ele.split(']')
         const time = timeMsec(a[0])
+        const obj = {}
         obj.time = time
         obj.lrc = a[1]
         obj.index = i

@@ -23,11 +23,15 @@
       </div>
     </div>
     <div class="off" />
-    <div class="song">
+    <div
+      ref="songs"
+      class="song"
+    >
       <ul>
         <li
           v-for="item of result"
           :key="item.id"
+          ref="song"
           :class="{active:currentItem === item , currentplay:currentplay === item}"
           @click="song(item,item.id)"
           @dblclick="dblsong(item,item.id )"
@@ -103,6 +107,9 @@ export default {
       currentplay: null,
     }
   },
+  mounted() {
+    // this.songHeight()
+  },
   methods: {
     song(item) {
       this.currentItem = item
@@ -112,6 +119,11 @@ export default {
       window.actions.play(item)
       window.actions.songInfo(item)
     },
+    // songHeight() {
+    //   const song = this.$refs.song
+    //   const songsHeight = this.$refs.songs
+    //   songsHeight.style.height = `${song[0].offsetHeight * song.length}px`
+    // },
 
   },
 }
@@ -152,14 +164,12 @@ export default {
     width: 100%;
     height: 1px;
     background-color: #ccc;
-    margin: 30px 0;
+    margin: 20px 0;
   }
   .song {
     li {
-      // line-height: 60px;
-      // height: 60px;
-      padding: 20px;
-      font-size: 14px;
+      padding: 10px 15px;
+      font-size: 12px;
       cursor: pointer;
       &:hover,
       &:nth-child(odd):hover {

@@ -4,6 +4,7 @@
       <div class="top">
         <div class="left">
           <div
+            id="disk"
             class="disk"
             :class="{ diskmove:store.lrc.disk}"
           >
@@ -67,12 +68,27 @@ export default {
   data() {
     return {
       store: window.store,
+      deg: 0,
+      timeID: Number,
     }
   },
   watch: {
     'store.lrc.currentLrc': function () {
       this.$refs.lrc.scrollTop += 34
     },
+    'store.audioData.tabplay': function () {
+      if (!this.store.audioData.tabplay) {
+        this.timeId = setInterval(() => {
+          this.deg += 0.1
+          document.querySelector('#disk').style.transform = `rotateZ(${this.deg}deg)`
+        }, 10)
+      } else {
+        clearInterval(this.timeId)
+      }
+    },
+  },
+  mounted() {
+    window.actions.lyric(this.store.songInfo)
   },
 }
 </script>
@@ -97,17 +113,17 @@ export default {
              background-size:600px;
              background-position:-223px -918px;
              position: relative;
-             &.diskmove {
-                animation: disk 10s linear infinite;
-                @keyframes disk {
-                 0% {
+            //  &.diskmove {
+            //     animation: disk 10s linear infinite;
+            //     @keyframes disk {
+            //      0% {
 
-                 }
-                 100% {
-                  transform: rotateZ(360deg)
-                 }
-               }
-             }
+            //      }
+            //      100% {
+            //       transform: rotateZ(360deg)
+            //      }
+            //    }
+            //  }
              img {
                width: 206px;
                height:206px;

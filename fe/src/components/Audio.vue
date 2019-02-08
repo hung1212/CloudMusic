@@ -45,9 +45,7 @@ export default {
       this.store.audioData.width = `${this.store.audio.currentTime * 1000 / window.store.songInfo.dt * 100}%`
       this.store.lrc.currentLrc = this.store.lrc.lyric.find((ele, i, arr) => {
         let flag = true
-        console.log(i, arr.length - 1)
         if (i === arr.length - 2) {
-          console.log(ele)
           flag = false
           return ele
         }

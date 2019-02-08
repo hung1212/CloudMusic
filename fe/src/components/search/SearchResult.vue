@@ -175,5 +175,9 @@ export default {
       }
     }
   }
+  .show {
+    overflow: auto;
+    height: calc(100vh - 206px);
+  }
 }
 </style>
