@@ -60,6 +60,9 @@ export default {
   },
   watch: {
     searchKeyword(value) {
+      $.get('/search/suggest', { keywords: value }, (res) => {
+        console.log(res)
+      })
       if (value === '') this.cut = false
     },
   },
@@ -117,6 +120,7 @@ export default {
 .search {
   padding: 20px 25px;
   flex:1;
+  overflow: hidden;
   .searchbox {
     width: 100%;
     height: 40px;

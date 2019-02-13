@@ -1,82 +1,197 @@
 <template>
-  <div class="nav">
-    <div class="shrink">
-      <span class="iconfont icon-sanhengxian" />
+  <div v-show="$route.name != 'Lyric'">
+    <div
+      v-if="!store.user.profile"
+      class="nav"
+    >
+      <div class="shrink">
+        <span class="iconfont icon-sanhengxian" />
+      </div>
+      <div class="nav-box">
+        <div class="box1 box">
+          <router-link to="/">
+            <div
+              class="item active"
+              @click="currentItme"
+            >
+              <span class="iconfont icon-sousuo" />
+              搜索
+            </div>
+          </router-link>
+          <router-link to="/discovr/recommend">
+            <div
+              class="item"
+              @click="currentItme"
+            >
+              <span class="iconfont icon-yinle" />
+              发现音乐
+            </div>
+          </router-link>
+          <router-link to="/mv">
+            <div class="item">
+              <span class="iconfont icon-mv" />
+              MV
+            </div>
+          </router-link>
+          <router-link to="/friend">
+            <div class="item">
+              <span class="iconfont icon-19" />
+              朋友
+            </div>
+          </router-link>
+        </div>
+        <div class="box2 box">
+          <router-link to="/local">
+            <div class="item">
+              <span class="iconfont icon-bendiyinle" />
+              本地音乐
+            </div>
+          </router-link>
+          <router-link to="/download">
+            <div class="item">
+              <span class="iconfont icon-xiazai" />
+              下载管理
+            </div>
+          </router-link>
+          <router-link to="/lyLate">
+            <div class="item">
+              <span class="iconfont icon-zuijinbofang" />
+              最近播放
+            </div>
+          </router-link>
+        </div>
+        <div class="box3 box">
+          <div class="title">
+            创建的歌单<span class="iconfont icon-jia" />
+          </div>
+          <div class="item">
+            <span class="iconfont icon-xihuan" />
+            我喜欢的音乐
+          </div>
+        </div>
+      </div>
+      <div class="user">
+        <div
+          class="log"
+          @click="login"
+        >
+          <span class="iconfont icon-gexinghuapingtaitubiao-" />
+          <span class="name">
+            未登录
+          </span>
+        </div>
+        <div class="right">
+          <span class="iconfont icon-youxiang1" />
+          <span class="iconfont icon-shezhi" />
+        </div>
+      </div>
+      <user />
     </div>
-    <div class="nav-box">
-      <div class="box1 box">
-        <div class="item active">
-          <span class="iconfont icon-sousuo" />
-          搜索
+    <div
+      v-else
+      class="nav"
+    >
+      <div class="shrink">
+        <span class="iconfont icon-sanhengxian" />
+      </div>
+      <div class="nav-box">
+        <div class="box1 box">
+          <router-link to="/">
+            <div
+              class="item active"
+              @click="currentItme"
+            >
+              <span class="iconfont icon-sousuo" />
+              搜索
+            </div>
+          </router-link>
+          <router-link to="/discovr/recommend">
+            <div
+              class="item"
+              @click="currentItme"
+            >
+              <span class="iconfont icon-yinle" />
+              发现音乐
+            </div>
+          </router-link>
+          <router-link to="/mv">
+            <div class="item">
+              <span class="iconfont icon-mv" />
+              MV
+            </div>
+          </router-link>
+          <router-link to="/friend">
+            <div class="item">
+              <span class="iconfont icon-19" />
+              朋友
+            </div>
+          </router-link>
         </div>
-        <div class="item">
-          <span class="iconfont icon-yinle" />
-          发现音乐
+        <div class="box2 box">
+          <div class="title">
+            我的音乐
+          </div>
+          <router-link to="/local">
+            <div class="item">
+              <span class="iconfont icon-bendiyinle" />
+              本地音乐
+            </div>
+          </router-link>
+          <router-link to="/download">
+            <div class="item">
+              <span class="iconfont icon-xiazai" />
+              下载管理
+            </div>
+          </router-link>
+          <router-link to="/lyLate">
+            <div class="item">
+              <span class="iconfont icon-zuijinbofang" />
+              最近播放
+            </div>
+          </router-link>
+          <div class="item">
+            <span class="iconfont icon-77" />
+            我的音乐云盘
+          </div>
+          <div class="item">
+            <span class="iconfont icon-diantai" />
+            我的电台
+          </div>
+          <div class="item">
+            <span class="iconfont icon-tianjiawenjian" />
+            我的收藏
+          </div>
         </div>
-        <div class="item">
-          <span class="iconfont icon-mv" />
-          MV
-        </div>
-        <div class="item">
-          <span class="iconfont icon-19" />
-          朋友
+        <div class="box3 box">
+          <div class="title">
+            创建的歌单<span class="iconfont icon-jia" />
+          </div>
+          <div class="item">
+            <span class="iconfont icon-xihuan" />
+            我喜欢的音乐
+          </div>
         </div>
       </div>
-      <div class="box2 box">
-        <div class="title">
-          我的音乐
+      <div class="user">
+        <div
+          class="log"
+          @click="login"
+        >
+          <img
+            :src="store.user.profile.avatarUrl"
+            alt=""
+          >
+          <span class="name">
+            {{ store.user.profile.nickname }}
+          </span>
         </div>
-        <div class="item">
-          <span class="iconfont icon-bendiyinle" />
-          本地音乐
-        </div>
-        <div class="item">
-          <span class="iconfont icon-xiazai" />
-          下载管理
-        </div>
-        <div class="item">
-          <span class="iconfont icon-zuijinbofang" />
-          最近播放
-        </div>
-        <div class="item">
-          <span class="iconfont icon-77" />
-          我的音乐云盘
-        </div>
-        <div class="item">
-          <span class="iconfont icon-diantai" />
-          我的电台
-        </div>
-        <div class="item">
-          <span class="iconfont icon-tianjiawenjian" />
-          我的收藏
+        <div class="right">
+          <span class="iconfont icon-youxiang1" />
+          <span class="iconfont icon-shezhi" />
         </div>
       </div>
-      <div class="box3 box">
-        <div class="title">
-          创建的歌单<span class="iconfont icon-jia" />
-        </div>
-        <div class="item">
-          <span class="iconfont icon-xihuan" />
-          我喜欢的音乐
-        </div>
-      </div>
+      <user />
     </div>
-    <div class="user">
-      <div
-        class="log"
-        @click="login"
-      >
-        <span class="iconfont icon-gexinghuapingtaitubiao-" />
-        <span class="name">
-          未登录
-        </span>
-      </div>
-      <div class="right">
-        <span class="iconfont icon-youxiang1" />
-        <span class="iconfont icon-shezhi" />
-      </div>
-    </div>
-    <user />
   </div>
 </template>
 <script>
@@ -89,6 +204,7 @@ export default {
   },
   data() {
     return {
+      store: window.store,
       show: false,
     }
   },
@@ -102,6 +218,9 @@ export default {
         $('#user').animate({ right: '0' }, 200)
       }
     },
+    currentItme() {
+
+    },
   },
 }
 </script>
@@ -114,12 +233,22 @@ export default {
         background-color: #f3f3f5;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+        height: 100%;
         .shrink {
             padding: 20px;
         }
         .nav-box {
             flex: 1;
+            overflow: auto;
+            .router-link-exact-active>div {
+              background: #dddde1;
+              border-left:2px solid #bc2f2d
+            }
             .box {
+                a {
+                  color: #000;
+                }
                 .title {
                        line-height: 40px;
                        margin-top: 15px;
@@ -132,10 +261,6 @@ export default {
                 .item {
                     line-height: 40px;
                     padding-left: 15px;
-                    &.active {
-                        background: #dddde1;
-                        border-left:2px solid #bc2f2d
-                    }
                     span {
                         padding-right: 15px;
                     }
@@ -153,6 +278,12 @@ export default {
             .log {
                 display: flex;
                 cursor: pointer;
+                align-items: center;
+                img {
+                  width: 30px;
+                  height: 30px;
+                  margin:0 8px;
+                }
             }
             .iconfont {
                 padding: 0 10px;

@@ -80,7 +80,7 @@ export default {
       if (!this.store.audioData.tabplay) {
         this.timeId = setInterval(() => {
           this.deg += 0.1
-          document.querySelector('#disk').style.transform = `rotateZ(${this.deg}deg)`
+          this.store.lrc.diskData.style.transform = `rotateZ(${this.deg}deg)`
         }, 10)
       } else {
         clearInterval(this.timeId)
@@ -89,6 +89,7 @@ export default {
   },
   mounted() {
     window.actions.lyric(this.store.songInfo)
+    this.store.lrc.diskData = document.querySelector('#disk')
   },
 }
 </script>
@@ -98,7 +99,6 @@ export default {
   background: #d7d8d9;
 }
     .main {
-       width: 1000px;
        margin:0 auto;
        padding: 50px 0 100px 0;
        .top {

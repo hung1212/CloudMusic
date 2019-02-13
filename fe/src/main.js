@@ -2,8 +2,11 @@ import Vue from 'vue'
 import jquery from 'jquery'
 import App from './App.vue'
 import router from './router'
+import './css/main.less'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
+import 'swiper/dist/css/swiper.css'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
 // import VueRouter from 'vue-router'
 // import 'font-awesome/scss/font-awesome.scss'
 window.$ = jquery
@@ -176,6 +179,7 @@ window.store = {
     lyric: null, // 歌词
     currentLrc: {}, // 当前显示的一句歌词
     disk: false, // 歌词的圆盘动画效果
+    diskData: null,
     diskFalse: true,
   },
   audioData: {
@@ -191,9 +195,13 @@ window.store = {
   storage: {
     playList: localStorage.playList ? JSON.parse(localStorage.playList) : [],
   },
+  user: {
+    profile: null,
+  },
 }
 
 Vue.config.productionTip = false
+Vue.use(VueAwesomeSwiper)
 new Vue({
   router,
   render: h => h(App),

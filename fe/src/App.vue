@@ -32,10 +32,12 @@ export default {
     .main {
       display: flex;
       flex-direction: column;
+      // width:1200px;
+      // margin:0 auto;
       .top {
         display: flex;
-        overflow: hidden;
-        height: calc(100vh - 70px)
+        height: calc(100vh - 70px);
+        background:#fafafc
       }
     }
 </style>
