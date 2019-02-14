@@ -1,5 +1,7 @@
 <template>
-  <div class="comment-box">
+  <div
+    class="comment-box"
+  >
     <div class="comment">
       <div class="title">
         评论 <span>({{ commentData.total }})</span>
@@ -11,149 +13,165 @@
         <span class="iconfont icon-youxiang" />
       </div>
     </div>
-    <div class="hotComments">
-      <div class="title">
-        精彩评论
-      </div>
-      <div class="content">
-        <div
-          v-for="(item) of hotCommentsData"
-          :key="item.commentId"
-          class="a"
-        >
-          <div class="left">
-            <img
-              :src="item.user.avatarUrl"
-              alt=""
-            >
-          </div>
-          <div class="right">
-            <div class="pl">
-              <p><span>{{ item.user.nickname }}</span>: {{ item.content }}</p>
-            </div>
-            <div class="view">
-              <div class="time">
-                {{ item.time | time }}
-              </div>
-              <div class="view-righ">
-                <p class="good">
-                  <span class="iconfont icon-zan-copy" />
-                  ({{ item.likedCount }})
-                </p>
-                <p class="bar" />
-                <a class="share">
-                  分享
-                </a>
-                <p class="bar" />
-                <a class="reply">
-                  回复
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="comments">
-      <div class="title">
-        最新评论
-      </div>
-      <div class="content">
-        <div
-          v-for="(item) of commentData.comments"
-          :key="item.commentId"
-          class="a"
-        >
-          <div class="left">
-            <img
-              :src="item.user.avatarUrl"
-              alt=""
-            >
-          </div>
-          <div
-            v-if="item.beReplied.length === 0"
-            class="right"
-          >
-            <div class="pl">
-              <p><span>{{ item.user.nickname }}</span>: {{ item.content }}</p>
-            </div>
-            <div class="view">
-              <div class="time">
-                {{ item.time | time }}
-              </div>
-              <div class="view-righ">
-                <p class="good">
-                  <span class="iconfont icon-zan-copy" />
-                  ({{ item.likedCount }})
-                </p>
-                <p class="bar" />
-                <a class="share">
-                  分享
-                </a>
-                <p class="bar" />
-                <a class="reply">
-                  回复
-                </a>
-              </div>
-            </div>
-          </div>
-          <div
-            v-else
-            class="right-else"
-          >
-            <div class="cur-pl">
-              <span>{{ item.beReplied[0].user.nickname }}</span>: 回复
-              <span>@{{ item.user.nickname }}</span>:
-              {{ item.beReplied[0].content }}
-            </div>
-            <div class="pl">
-              <p><span>@{{ item.user.nickname }}</span>: {{ item.content }}</p>
-            </div>
-            <div class="view">
-              <div class="time">
-                {{ item.time | time }}
-              </div>
-              <div class="view-righ">
-                <p class="good">
-                  <span class="iconfont icon-zan-copy" />
-                  ({{ item.likedCount }})
-                </p>
-                <p class="bar" />
-                <a class="share">
-                  分享
-                </a>
-                <p class="bar" />
-                <a class="reply">
-                  回复
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="total-page">
-      <button @click="tabPage(1)">
-        首页
-      </button>
-      <button @click="tabPage(page-1)">
-        上一页
-      </button>
-      <button
-        v-for="index of totalPage"
-        v-if="index>=viewPage.start&&index<=viewPage.end"
-        :key="index"
-        :class="{current:index === page}"
-        @click="tabPage(index)"
+    <div
+      v-if="loading"
+
+      class="loading"
+    >
+      <img
+        src="http://files.57gif.com/webgif/0/e/14/b6578a8f6e0aa313dd26b750e8dc0.gif"
+        alt="加载中"
       >
-        {{ index }}
-      </button>
-      <button @click="tabPage(page+1)">
-        下一页
-      </button>
-      <button @click="tabPage(totalPage)">
-        末页
-      </button>
+    </div>
+    <div v-else>
+      <div
+        v-if="page === 1"
+        class="hotComments"
+      >
+        <div class="title">
+          精彩评论
+        </div>
+        <div class="content">
+          <div
+            v-for="(item) of hotCommentsData"
+            :key="item.commentId"
+            class="a"
+          >
+            <div class="left">
+              <img
+                :src="item.user.avatarUrl"
+                alt=""
+              >
+            </div>
+            <div class="right">
+              <div class="pl">
+                <p><span>{{ item.user.nickname }}</span>: {{ item.content }}</p>
+              </div>
+              <div class="view">
+                <div class="time">
+                  {{ item.time | time }}
+                </div>
+                <div class="view-righ">
+                  <p class="good">
+                    <span class="iconfont icon-zan-copy" />
+                    ({{ item.likedCount }})
+                  </p>
+                  <p class="bar" />
+                  <a class="share">
+                    分享
+                  </a>
+                  <p class="bar" />
+                  <a class="reply">
+                    回复
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comments">
+        <div class="title">
+          最新评论
+        </div>
+
+        <div class="content">
+          <div
+            v-for="(item) of commentData.comments"
+            :key="item.commentId"
+            class="a"
+          >
+            <div class="left">
+              <img
+                :src="item.user.avatarUrl"
+                alt=""
+              >
+            </div>
+            <div
+              v-if="item.beReplied.length === 0"
+              class="right"
+            >
+              <div class="pl">
+                <p><span>{{ item.user.nickname }}</span>: {{ item.content }}</p>
+              </div>
+              <div class="view">
+                <div class="time">
+                  {{ item.time | time }}
+                </div>
+                <div class="view-righ">
+                  <p class="good">
+                    <span class="iconfont icon-zan-copy" />
+                    ({{ item.likedCount }})
+                  </p>
+                  <p class="bar" />
+                  <a class="share">
+                    分享
+                  </a>
+                  <p class="bar" />
+                  <a class="reply">
+                    回复
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              class="right-else"
+            >
+              <div class="cur-pl">
+                <span>{{ item.beReplied[0].user.nickname }}</span>: 回复
+                <span>@{{ item.user.nickname }}</span>:
+                {{ item.beReplied[0].content }}
+              </div>
+              <div class="pl">
+                <p><span>@{{ item.user.nickname }}</span>: {{ item.content }}</p>
+              </div>
+              <div class="view">
+                <div class="time">
+                  {{ item.time | time }}
+                </div>
+                <div class="view-righ">
+                  <p class="good">
+                    <span class="iconfont icon-zan-copy" />
+                    ({{ item.likedCount }})
+                  </p>
+                  <p class="bar" />
+                  <a class="share">
+                    分享
+                  </a>
+                  <p class="bar" />
+                  <a class="reply">
+                    回复
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="total-page">
+        <button @click="tabPage(1)">
+          首页
+        </button>
+        <button @click="tabPage(page-1)">
+          上一页
+        </button>
+        <button
+          v-for="index of totalPage"
+          v-if="index>=viewPage.start&&index<=viewPage.end"
+          :key="index"
+          :class="{current:index === page}"
+          @click="tabPage(index)"
+        >
+          {{ index }}
+        </button>
+        <button @click="tabPage(page+1,$event)">
+          下一页
+        </button>
+        <button @click="tabPage(totalPage)">
+          末页
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -178,6 +196,7 @@ export default {
       page: 1,
       limit: 10,
       totalPage: '',
+      loading: false,
     }
   },
   computed: {
@@ -205,6 +224,7 @@ export default {
     this.comments(this.page)
   },
   methods: {
+
     hotComment() {
       $.get('/comment/music', { id: this.store.songInfo.id }, (res) => {
         this.hotCommentsData = res.hotComments
@@ -215,11 +235,14 @@ export default {
       $.get('/comment/music', { id: this.store.songInfo.id, limit: this.limit, offset: (page - 1) * this.limit }, (res) => {
         this.commentData = res
         this.totalPage = Math.ceil(res.total / this.limit)
+        this.loading = false
       })
     },
     tabPage(index) {
       if (index < 1 || index > this.totalPage) return
+      this.loading = true
       this.page = index
+      window.scrollTo(0, 400)
       this.comments(this.page)
     },
   },
@@ -318,6 +341,7 @@ export default {
                     .right-else {
                         .comment-right;
                            .cur-pl {
+                             font-size: 12px;
                             span {
                                 color: #477aac;
                                 cursor: pointer;;
@@ -337,7 +361,7 @@ export default {
             }
         }
         .total-page {
-            margin:20px 0 0 0;
+            margin:20px 0 100px 0;
             display: flex;
             justify-content: center;
             button {

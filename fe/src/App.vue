@@ -2,7 +2,10 @@
   <div
     class="main"
   >
-    <div class="top">
+    <div
+      class="top"
+      :style="{ height: $route.name === 'Lyric'? 'auto' :'calc(100vh - 70px)' }"
+    >
       <Nav />
       <router-view />
     </div>
@@ -36,7 +39,6 @@ export default {
       // margin:0 auto;
       .top {
         display: flex;
-        height: calc(100vh - 70px);
         background:#fafafc
       }
     }

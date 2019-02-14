@@ -141,11 +141,6 @@ export default {
 
 <style lang="less" scoped>
 .search-result {
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   .search-result-title {
     display: flex;
     font-size: 16px;

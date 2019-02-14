@@ -30,6 +30,7 @@
     <div
       class="progressPD"
       @click="clickBar"
+      @mousedown="down"
     >
       <div
         ref="bur"
@@ -43,7 +44,6 @@
           <div
             ref="dian"
             class="dian"
-            @mousedown="down"
           />
         </div>
       </div>
@@ -127,6 +127,7 @@ export default {
       this.dowmX = e.clientX - this.$refs.bur.getBoundingClientRect().left
       this.flag = true
       this.store.audioData.curflag = false
+      window.store.audio.currentTime = window.store.songInfo.dt / 1000 * this.ratio
     },
     move(e) {
       if (!this.flag) return
@@ -135,19 +136,17 @@ export default {
       const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.dowmX
       this.store.audioData.width = `${moveX / this.$refs.bur.offsetWidth * 100}%`
       this.ratio = moveX / this.$refs.bur.offsetWidth
-
       this.store.tabplay = false
-      this.store.audio.play()
-
-      if (moveX > this.$refs.bur.offsetWidth) this.up()
+      if (moveX >= this.$refs.bur.offsetWidth) this.up()
     },
     up() {
+      this.store.audio.play()
       this.flag = false
       this.store.audioData.curflag = true
       window.store.audio.currentTime = window.store.songInfo.dt / 1000 * this.ratio
     },
 
-    // // 只要进度条发生改变,当前时间也改变
+    // 只要进度条发生改变,当前时间也改变
     clickBar(e) {
       if (e.target === this.$refs.dian) return
       if (this.store.audio.autoplay) {

@@ -2,6 +2,8 @@
   <div
     v-if="store.storage.playList.length > 0 && store.songInfo"
     class="caozuo"
+    @mousemove="VOmove"
+    @mouseup="VOup"
   >
     <div class="like">
       <span class="iconfont icon-xihuan" />
@@ -27,8 +29,41 @@
         class="iconfont icon-bofangliebiao"
       />
     </div>
-    <div class="volume">
+    <div
+      class="volume"
+      @click="volume"
+    >
       <span class="iconfont icon-yinliang" />
+      <div
+        v-show="volumeShow"
+        class="volume-box"
+      >
+        <span class="iconfont icon-yinliang" />
+        <div
+          class="dianji"
+          @mousedown="down"
+        >
+          <div
+            ref="width"
+            class="width"
+          >
+            <div
+              ref="wacthNull"
+              class="wacthNull"
+            >
+              <div
+                ref="wacth"
+                class="wacth"
+              >
+                <div
+                  ref="dian"
+                  class="dian"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       class="playList"
@@ -221,9 +256,16 @@ export default {
       playsbox: false,
       currentTime: '',
       playTime: '',
+      downX: null,
+      move: false,
+      wacthWidth: null,
+      volumeShow: false,
     }
   },
   methods: {
+    volume() {
+      this.volumeShow = !this.volumeShow
+    },
     schema() {
       if (this.store.audioData.schema === 1) {
         this.store.audioData.schema += 1
@@ -238,6 +280,28 @@ export default {
         this.store.audioData.schema = 1
         window.alert('列表循环')
       }
+    },
+    // // 操作音量
+    down(e) {
+      this.wacthWidth = this.$refs.wacth.offsetWidth
+      this.move = true
+      this.downX = e.clientX - this.$refs.width.getBoundingClientRect().left
+      if (e.target === this.$refs.dian) return
+      this.$refs.wacth.style.width = `${(this.downX - this.$refs.dian.offsetWidth / 2) / (this.$refs.wacthNull.offsetWidth) * 100}%`
+      this.store.audio.volume = this.downX / (this.$refs.width.offsetWidth
+      - this.$refs.dian.offsetWidth / 2 + this.$refs.dian.offsetWidth)
+    },
+    VOmove(e) {
+      if (!this.move) return
+      const moveX = e.clientX - this.$refs.width.getBoundingClientRect().left
+      const sum = (this.wacthWidth + (moveX - this.downX)) / this.$refs.width.offsetWidth
+      // console.log(sum)
+      if (moveX >= this.$refs.width.offsetWidth || sum < 0) return
+      this.$refs.wacth.style.width = `${sum * 100}%`
+      this.store.audio.volume = sum
+    },
+    VOup() {
+      this.move = false
     },
     // 切换播放列表
     playList() {
@@ -301,6 +365,84 @@ export default {
               flex: 1;
               display: flex;
               justify-content: center;
+          }
+          > .volume {
+            position: relative;
+            .volume-box {
+              background: #fff;
+              position: absolute;
+              bottom: 80px;
+              left: -180px;
+              border:1px solid #000;
+              width: 300px;
+              padding:0 10px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              &::before {
+                content: "";
+                width: 0;
+                height: 0;
+                border-width: 20px 15px 0 15px;
+                border-style: dashed;
+                border-color: #cdcdce transparent transparent transparent;
+                position: absolute;
+                bottom:-20px;
+                right: 80px;
+              }
+              &::after {
+                content: "";
+                width: 0;
+                height: 0;
+                border-width: 20px 15px 0 15px;
+                border-style: dashed;
+                border-color: #fff transparent transparent transparent;
+                position: absolute;
+                bottom:-19px;
+                right: 80px;
+              }
+              .dianji {
+                flex: 1;
+                padding: 10px 0;
+                margin-left: 10px;
+                .width {
+                  background:#e5e5e5;
+                  height: 2px;
+                  padding-right: 20px;
+                  .wacthNull {
+                    height: 100%;
+                    .wacth {
+                      width: 100%;
+                      height: 100%;
+                      background: #bc2f2d;
+                      position: relative;
+                      .dian {
+                          width: 20px;
+                          height: 20px;
+                          border:1px solid #cccccc;
+                          border-radius: 50%;
+                          position: absolute;
+                          top: -9px;
+                          right: 0;
+                          background: #fff;
+                          transform: translateX(100%);
+                          &::before {
+                            content:'';
+                            position: absolute;
+                            top: 50%;
+                            left:50%;
+                            transform: translate(-50%,-50%);
+                            width: 5px;
+                            height:5px;
+                            border-radius: 50%;
+                            background:#bc2f2d;
+                          }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
           > .playList {
               .control-plays {

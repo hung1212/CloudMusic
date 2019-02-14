@@ -1,6 +1,10 @@
 <template>
   <div class="bg">
     <div class="main">
+      <div
+        class="lry-bg"
+        :style="{backgroundImage: 'url('+store.songInfo.al.picUrl+')'}"
+      />
       <div class="top">
         <div class="left">
           <div
@@ -97,22 +101,32 @@ export default {
 <style lang="less" scoped>
 .bg {
   background: #d7d8d9;
-}
-    .main {
-       margin:0 auto;
-       padding: 50px 0 100px 0;
-       .top {
-        background: #697a83;
+  width: 100%;
+  .main {
+    .lry-bg {
+      height: 500px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      filter: blur(200px);
+    }
+    .top {
+        width: 1000px;
+        position:absolute;
+        top: 10px;
+        left: 50%;
+        transform: translate(-50%,0);
         display: flex;
-         .left {
-           padding-top:20px;
-           .disk {
-             width: 322px;
-             height: 322px;
-             background: url("https://s2.music.126.net/style/web2/img/coverall.png?18787c7fb492ce0033964d1ce51e2e9c") no-repeat center;
-             background-size:600px;
-             background-position:-223px -918px;
-             position: relative;
+        height: 500px;
+        .left {
+          padding-top:20px;
+          .disk {
+            width: 322px;
+            height: 322px;
+            background: url("https://s2.music.126.net/style/web2/img/coverall.png?18787c7fb492ce0033964d1ce51e2e9c") no-repeat center;
+            background-size:600px;
+            background-position:-223px -918px;
+            position: relative;
             //  &.diskmove {
             //     animation: disk 10s linear infinite;
             //     @keyframes disk {
@@ -124,55 +138,58 @@ export default {
             //      }
             //    }
             //  }
-             img {
-               width: 206px;
-               height:206px;
-               border-radius: 50%;
-               position: absolute;
-               top: 50%;
-               left: 50%;
-               transform: translate(-50%,-50%)
-             }
-           }
-         }
-         .right {
-           flex: 1;
-           margin-left: 80px;
-           h4 {
-             font-size: 20px;
-             color: #333333;
-             font-weight: normal;
-           }
-           .intro {
-             display: flex;
-             margin: 10px 0 20px 0;
-             p {
-               margin-right: 20px;
-               a {
+            img {
+              width: 206px;
+              height:206px;
+              border-radius: 50%;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%,-50%)
+            }
+          }
+        }
+        .right {
+          flex: 1;
+          margin-left: 80px;
+          h4 {
+            font-size: 20px;
+            color: #333333;
+            font-weight: normal;
+          }
+          .intro {
+            display: flex;
+            margin: 10px 0 20px 0;
+            p {
+              margin-right: 20px;
+              a {
                 color: #1a5a99;
-               }
-             }
+              }
+            }
 
-           }
-           .lrc {
-             height: 400px;
-             overflow-x: auto;
-             p {
-               font-size: 16px;
-               line-height: 34px;
-               &.active {
-                 color: #fff;
-               }
-             }
-           }
-         }
-       }
-       .bottom {
-         display: flex;
-         .right {
-           width: 300px;
-           margin-left: 50px;
-         }
-       }
+          }
+          .lrc {
+            height: 400px;
+            overflow-x: auto;
+            p {
+              font-size: 16px;
+              line-height: 34px;
+              &.active {
+                color: #fff;
+              }
+            }
+          }
+        }
     }
+  }
+  .bottom {
+    width: 1000px;
+    margin:0 auto;
+        display: flex;
+        .right {
+          width: 300px;
+          margin-left: 50px;
+        }
+  }
+}
 </style>
