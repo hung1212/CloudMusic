@@ -1,5 +1,7 @@
 <template>
-  <div id="discovr">
+  <div
+    id="discovr"
+  >
     <div class="herader">
       发现音乐
     </div>
@@ -63,35 +65,41 @@ export default {
 <style lang="less" scoped>
     @main-color:#c62e2e;
     #discovr {
-        padding: 20px 25px;
+        padding: 20px 0 0 25px;
+        display: flex;
+        flex-direction: column;
         flex: 1;
         .main {
-            .nav {
-                ul {
-                    display: flex;
-                    border-bottom: 1px solid #e4e4e7;
-                    .router-link-exact-active>li {
-                        color: @main-color;
-                        border-bottom:2px solid #c62e2e
-                    }
-                    >a {
-                        color: #000;
-                    }
-                    li {
-                        font-size: 16px;
-                        margin-right: 20px;
-                        padding: 15px 0;
-                        cursor: pointer;
-                        margin-bottom: -1px;
-                    }
-                }
+          display: flex;
+          flex-direction: column;
+          .nav {
+              ul {
+                  display: flex;
+                  border-bottom: 1px solid #e4e4e7;
+                  .router-link-exact-active>li {
+                      color: @main-color;
+                      border-bottom:2px solid #c62e2e
+                  }
+                  >a {
+                      color: #000;
+                  }
+                  li {
+                      font-size: 16px;
+                      margin-right: 20px;
+                      padding: 15px 0;
+                      cursor: pointer;
+                      margin-bottom: -1px;
+                  }
+              }
+          }
+          .content {
+            flex: 1;
+            overflow: auto;
+            >div {
+              width: 1000px;
+              margin:0 auto;
             }
-            .content {
-                // width: 1000px;
-                padding: 0 100px;
-                height:calc(100vh - 120px);
-                overflow: auto;
-            }
+          }
         }
     }
 </style>

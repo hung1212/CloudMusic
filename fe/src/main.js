@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
+import './assets/less/pack.less'
 import 'swiper/dist/css/swiper.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 // import VueRouter from 'vue-router'
@@ -171,6 +172,7 @@ window.mutations = {
 }
 
 window.store = {
+  actions: window.actions,
   audio: null,
   // singerData: null,
   songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
@@ -178,8 +180,8 @@ window.store = {
     lyric: null, // 歌词
     currentLrc: {}, // 当前显示的一句歌词
     disk: false, // 歌词的圆盘动画效果
-    diskData: null,
     diskFalse: true,
+    sum: 0,
   },
   audioData: {
     curflag: true,
@@ -189,6 +191,7 @@ window.store = {
     tabplay: true,
     schema: 1,
     flagAudio: false,
+    volumeMove: false,
     // playsbox: true,
   },
   storage: {
@@ -196,6 +199,32 @@ window.store = {
   },
   user: {
     profile: null,
+    userLogin: null,
+    // 登陆用户
+    status() {
+      $.get('/login/status', (res) => {
+        if (res.code === 200) {
+          window.store.user.userLogin = res.profile
+          window.store.user.detail()
+          window.store.user.subcount()
+        }
+      })
+    },
+    // 获取用户详情
+    detail() {
+      $.get({
+        url: '/user/detail',
+        data: { uid: window.store.user.userLogin.userId },
+        success: (res) => {
+          window.store.user.profile = res.profile
+        },
+      })
+    },
+    subcount() {
+      $.get('/user/subcount', (res) => {
+        console.log(res)
+      })
+    },
   },
 }
 

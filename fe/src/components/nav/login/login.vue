@@ -117,21 +117,15 @@ export default {
       if (this.type === 'phone') { // 手机登陆
         $.get('/login/cellphone', { phone: this.ac, password: this.password }, (res) => {
           this.store.user.profile = res.profile
-          localStorage.setItem('user', JSON.stringify([this.ac, this.password]))
+          this.store.user.status()
         })
       } else if (this.type === 'email') { // 邮箱登陆
         $.get('/login', { email: this.ac, password: this.password }, (res) => {
           this.store.user.profile = res.profile
-          localStorage.setItem('user', JSON.stringify([this.ac, this.password]))
+          this.store.user.status()
         })
       }
     },
-    // status() {
-    //   $.get('/login/status', (res) => {
-    //     localStorage.setItem('user', JSON.stringify([this.ac, this.password]))
-    //     this.store.user.profile = res.profile
-    //   })
-    // },
   },
 }
 </script>

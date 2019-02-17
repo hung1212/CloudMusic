@@ -10,6 +10,7 @@
           <div
             id="disk"
             class="disk"
+            ref="disk"
             :class="{ diskmove:store.lrc.disk}"
           >
             <img
@@ -81,23 +82,32 @@ export default {
       this.$refs.lrc.scrollTop += 34
     },
     'store.audioData.tabplay': function () {
-      if (!this.store.audioData.tabplay) {
-        this.timeId = setInterval(() => {
-          this.deg += 0.1
-          this.store.lrc.diskData.style.transform = `rotateZ(${this.deg}deg)`
-        }, 10)
-      } else {
-        clearInterval(this.timeId)
-      }
+      this.disk()
     },
   },
   mounted() {
     window.actions.lyric(this.store.songInfo)
-    this.store.lrc.diskData = document.querySelector('#disk')
+    this.disk()
+  },
+  destroyed() {
+    clearInterval(this.store.timeID)
+  },
+  methods: {
+    disk() {
+      this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
+      if (!this.store.audioData.tabplay) {
+        this.store.timeID = setInterval(() => {
+          this.store.lrc.sum += 0.01
+          if (this.store.lrc.sum >= 360) this.store.lrc.sum = 0
+          this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
+        }, 5)
+      } else {
+        clearInterval(this.store.timeID)
+      }
+    },
   },
 }
 </script>
-
 <style lang="less" scoped>
 .bg {
   background: #d7d8d9;

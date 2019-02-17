@@ -2,8 +2,6 @@
   <div
     v-if="store.storage.playList.length > 0 && store.songInfo"
     class="info"
-    @mousemove="move"
-    @mouseup="up"
   >
     <div class="song">
       <div class="left">
@@ -29,23 +27,24 @@
     </div>
     <div
       class="progressPD"
-      @click="clickBar"
       @mousedown="down"
     >
       <div
         ref="bur"
         class="progress"
       >
-        <div
-          ref="wacth"
-          class="wacth"
-          :style="{width:store.audioData.width}"
-        >
+        <div class="width" ref="width">
           <div
-            ref="dian"
-            class="dian"
-          />
-        </div>
+            ref="wacth"
+            class="wacth"
+            :style="{width:store.audioData.width}"
+          >
+            <div
+              ref="dian"
+              class="dian"
+            />
+          </div>
+        </div>  
       </div>
     </div>
   </div>
@@ -73,21 +72,24 @@
         ref="bur"
         class="progress"
       >
-        <div
-          ref="wacth"
-          class="wacth"
-        >
+        <div class="width" ref="width">
           <div
-            ref="dian"
-            class="dian"
-          />
-        </div>
+            ref="wacth"
+            class="wacth"
+          >
+            <div
+              ref="dian"
+              class="dian"
+            />
+          </div>
+        </div>  
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Operate',
   filters: {
@@ -111,53 +113,86 @@ export default {
     return {
       store: window.store,
       wacthWidth: '',
-      dowmX: '',
-      flag: false,
-      curflag: true,
+      downX: '',
       currentTime: '',
       ratio: '',
+      upPlay: true,
+      event: {},
     }
   },
+  mounted() {
+    this.$refs.width.style.width = `${this.$refs.bur.offsetWidth - 20}px`
+  },
   methods: {
+    a(e) {
+      this.move(e)
+    },
+    b(e) {
+      this.up(e)
+    },
     down(e) {
       this.wacthWidth = parseInt(
         getComputedStyle(this.$refs.wacth, null).width,
         10,
       )
-      this.dowmX = e.clientX - this.$refs.bur.getBoundingClientRect().left
-      this.flag = true
       this.store.audioData.curflag = false
-      window.store.audio.currentTime = window.store.songInfo.dt / 1000 * this.ratio
+      this.upPlay = false
+      this.downX = e.clientX - this.$refs.bur.getBoundingClientRect().left
+      const width = (this.downX - this.$refs.dian.offsetWidth / 2) / this.$refs.width.offsetWidth
+      this.$refs.wacth.style.width = `${width * 100}%`
+      this.store.audio.currentTime = width * window.store.songInfo.dt / 1000
+      document.addEventListener('mousemove', this.a)
+      document.addEventListener('mouseup', this.b)
+      if (e.target === this.$refs.dian) return
+      this.play(e)
     },
     move(e) {
-      if (!this.flag) return
-      // this.wacthWidth = parseInt(getComputedStyle(this.$refs.wacth, null).width)
-      // eslint-disable-next-line max-len
-      const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.dowmX
-      this.store.audioData.width = `${moveX / this.$refs.bur.offsetWidth * 100}%`
-      this.ratio = moveX / this.$refs.bur.offsetWidth
-      this.store.tabplay = false
-      if (moveX >= this.$refs.bur.offsetWidth) this.up()
+      this.upPlay = true
+      const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.downX
+      this.ratio = moveX / this.$refs.width.offsetWidth
+      this.store.audio.currentTime = this.ratio * window.store.songInfo.dt / 1000
+      this.store.audioData.width = `${this.ratio * 100}%`
+      if (moveX >= this.$refs.width.offsetWidth) this.up()
     },
-    up() {
-      this.store.audio.play()
-      this.flag = false
+    up(e) {
+      document.removeEventListener('mousemove', this.a)
+      document.removeEventListener('mouseup', this.b)
+      if (!this.upPlay) return
+      this.movePlay(e)
+      this.upPlay = false
+    },
+    play() {
       this.store.audioData.curflag = true
-      window.store.audio.currentTime = window.store.songInfo.dt / 1000 * this.ratio
-    },
-
-    // 只要进度条发生改变,当前时间也改变
-    clickBar(e) {
-      if (e.target === this.$refs.dian) return
-      if (this.store.audio.autoplay) {
-        window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left)
-        / this.$refs.bur.offsetWidth * window.store.songInfo.dt / 1000
-      } else {
+      this.store.audioData.tabplay = false
+      if (!this.store.audioData.src) {
         window.actions.play(this.store.songInfo, () => {
           // eslint-disable-next-line
-           window.store.audio.currentTime = (e.clientX - this.$refs.bur.getBoundingClientRect().left) / this.$refs.bur.offsetWidth * window.store.songInfo.dt/1000
+          this.store.audioData.curflag = true
         })
+      } else {
+        this.store.audio.play()
       }
+    },
+    movePlay(e) {
+      this.store.audioData.curflag = true
+      this.store.audioData.tabplay = false
+      if (!this.store.audioData.src) {
+        window.actions.play(this.store.songInfo, () => {
+          // eslint-disable-next-line
+          this.store.audioData.curflag = true
+          this.moveClient(e)
+        })
+      } else if (!this.store.audio.paused) {
+        this.moveClient(e)
+      } else {
+        this.store.audio.play()
+        this.moveClient(e)
+      }
+    },
+    moveClient(e) {
+      if (!e) return
+      const client = e.clientX - this.$refs.bur.getBoundingClientRect().left
+      this.store.audio.currentTime = (this.wacthWidth + (client - this.downX)) / this.$refs.width.offsetWidth * window.store.songInfo.dt / 1000
     },
   },
 }
@@ -177,32 +212,35 @@ export default {
               width: 100%;
               height: 3px;
               background: #e5e5e5;
-              .wacth {
-                position: relative;
-                width: 0;
+              .width {
                 height: 100%;
-                background:#d13c3a;
-                .dian {
-                  position: absolute;
-                  top: 50%;
-                  transform: translate(100% , -50%);
-                  right: 0px;
-                  width: 1px;
-                  height: 1px;
-                  border-radius: 50%;
-                  padding: 8px;
-                  border: 1px solid #ccc;
-                  &::after {
-                    content: "";
+                .wacth {
+                  position: relative;
+                  width: 0;
+                  height: 100%;
+                  background:#d13c3a;
+                  .dian {
                     position: absolute;
                     top: 50%;
-                    left: 50%;
-                    transform: translate(-50% , -50%);
-
-                    width: 6px;
-                    height: 6px;
-                    background: #df3b3b;
+                    transform: translate(100% , -50%);
+                    right: 0px;
+                    width: 20px;
+                    height: 20px;
                     border-radius: 50%;
+                    border: 1px solid #ccc;
+                    background: #fff;
+                    &::after {
+                      content: "";
+                      position: absolute;
+                      top: 50%;
+                      left: 50%;
+                      transform: translate(-50% , -50%);
+
+                      width: 6px;
+                      height: 6px;
+                      background: #df3b3b;
+                      border-radius: 50%;
+                    }
                   }
                 }
               }

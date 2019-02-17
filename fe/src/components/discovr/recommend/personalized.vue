@@ -1,7 +1,17 @@
 <template>
-  <div id="personalized">
-    <div class="title">
-      推荐歌单
+  <div
+    id="personalized"
+    class="margin-bottom30"
+  >
+    <div class="discovr-title">
+      <div class="left">
+        <span class="iconfont icon-rili" />
+        推荐MV
+      </div>
+      <div class="right">
+        更多
+        <span class="iconfont icon-arrow-right" />
+      </div>
     </div>
     <div class="content">
       <div
@@ -84,9 +94,11 @@ export default {
       .items {
         display: flex;
         justify-content: space-between;
+        &:nth-of-type(n+2) {
+          margin-top: 30px;
+        }
         .item {
           width: 180px;
-          margin-bottom: 30px;
           &:hover .img{
             transition: all 0.5s;
             opacity: .7;

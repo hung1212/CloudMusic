@@ -1,14 +1,14 @@
 <template>
-  <router-link
+  <div
     v-if="store.storage.playList.length > 0 && store.songInfo"
-    :to="$route.name === 'Lyric' ? '/' : '/lyric'"
     class="img"
+    @click="back"
   >
     <img
       :src="store.songInfo.al.picUrl"
       alt="stort"
     >
-  </router-link>
+  </div>
   <div
     v-else
     class="img-hidde img"
@@ -24,6 +24,15 @@ export default {
     return {
       store: window.store,
     }
+  },
+  methods: {
+    back() {
+      if (this.$route.name === 'Lyric') {
+        this.$router.go(-1)
+      } else {
+        this.$router.push('/lyric')
+      }
+    },
   },
 }
 </script>

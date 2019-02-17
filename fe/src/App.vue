@@ -7,7 +7,7 @@
       :style="{ height: $route.name === 'Lyric'? 'auto' :'calc(100vh - 70px)' }"
     >
       <Nav />
-      <router-view />
+      <router-view class="box" />
     </div>
     <Audio />
   </div>
@@ -38,8 +38,8 @@ export default {
       // width:1200px;
       // margin:0 auto;
       .top {
+        background:#fafafc;
         display: flex;
-        background:#fafafc
       }
     }
 </style>

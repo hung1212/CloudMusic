@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box">
     <!-- <swiperLrc /> -->
     <nominate />
     <personalized />
@@ -33,6 +33,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="less">
+  .box {
+  }
 </style>

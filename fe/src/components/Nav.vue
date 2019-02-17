@@ -1,7 +1,7 @@
 <template>
   <div v-show="$route.name != 'Lyric'">
     <div
-      v-if="!store.user.profile"
+      v-if="!store.user.userLogin"
       class="nav"
     >
       <div class="shrink">
@@ -171,6 +171,15 @@
             我喜欢的音乐
           </div>
         </div>
+        <div class="box3 box">
+          <div class="title">
+            收藏的歌单
+          </div>
+          <div class="item">
+            <span class="iconfont icon-xihuan" />
+            我喜欢的音乐
+          </div>
+        </div>
       </div>
       <div class="user">
         <div
@@ -178,11 +187,11 @@
           @click="login"
         >
           <img
-            :src="store.user.profile.avatarUrl"
+            :src="store.user.userLogin.avatarUrl"
             alt=""
           >
           <span class="name">
-            {{ store.user.profile.nickname }}
+            {{ store.user.userLogin.nickname }}
           </span>
         </div>
         <div class="right">
@@ -207,6 +216,9 @@ export default {
       store: window.store,
       show: false,
     }
+  },
+  mounted() {
+    this.store.user.status()
   },
   methods: {
     login() {

@@ -2,8 +2,6 @@
   <div
     v-if="store.storage.playList.length > 0 && store.songInfo"
     class="caozuo"
-    @mousemove="VOmove"
-    @mouseup="VOup"
   >
     <div class="like">
       <span class="iconfont icon-xihuan" />
@@ -31,9 +29,11 @@
     </div>
     <div
       class="volume"
-      @click="volume"
     >
-      <span class="iconfont icon-yinliang" />
+      <span
+        class="iconfont icon-yinliang"
+        @click="volume"
+      />
       <div
         v-show="volumeShow"
         class="volume-box"
@@ -257,12 +257,24 @@ export default {
       currentTime: '',
       playTime: '',
       downX: null,
-      move: false,
       wacthWidth: null,
       volumeShow: false,
+      evend: null,
     }
   },
+  mounted() {
+    this.wacthNull()
+    document.addEventListener('mousemove', (e) => {
+      this.VOmove(e)
+    })
+    document.addEventListener('mouseup', () => {
+      this.VOup()
+    })
+  },
   methods: {
+    wacthNull() {
+      this.$refs.wacthNull.style.width = `${252 - 20}px`
+    },
     volume() {
       this.volumeShow = !this.volumeShow
     },
@@ -284,7 +296,7 @@ export default {
     // // 操作音量
     down(e) {
       this.wacthWidth = this.$refs.wacth.offsetWidth
-      this.move = true
+      this.store.audioData.volumeMove = true
       this.downX = e.clientX - this.$refs.width.getBoundingClientRect().left
       if (e.target === this.$refs.dian) return
       this.$refs.wacth.style.width = `${(this.downX - this.$refs.dian.offsetWidth / 2) / (this.$refs.wacthNull.offsetWidth) * 100}%`
@@ -292,16 +304,20 @@ export default {
       - this.$refs.dian.offsetWidth / 2 + this.$refs.dian.offsetWidth)
     },
     VOmove(e) {
-      if (!this.move) return
+      if (!this.store.audioData.volumeMove) return
       const moveX = e.clientX - this.$refs.width.getBoundingClientRect().left
-      const sum = (this.wacthWidth + (moveX - this.downX)) / this.$refs.width.offsetWidth
-      // console.log(sum)
-      if (moveX >= this.$refs.width.offsetWidth || sum < 0) return
+      let sum = (this.wacthWidth + (moveX - this.downX)) / (this.$refs.width.offsetWidth - 20)
+      if (sum >= 1) {
+        sum = 1
+      } else if (sum <= 0) {
+        sum = 0
+      }
+      console.log(sum)
       this.$refs.wacth.style.width = `${sum * 100}%`
       this.store.audio.volume = sum
     },
     VOup() {
-      this.move = false
+      this.store.audioData.volumeMove = false
     },
     // 切换播放列表
     playList() {
@@ -368,6 +384,8 @@ export default {
           }
           > .volume {
             position: relative;
+            width: 100%;
+            text-align: center;
             .volume-box {
               background: #fff;
               position: absolute;
@@ -408,7 +426,7 @@ export default {
                 .width {
                   background:#e5e5e5;
                   height: 2px;
-                  padding-right: 20px;
+                  width: 252px;
                   .wacthNull {
                     height: 100%;
                     .wacth {
