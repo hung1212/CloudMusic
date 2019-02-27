@@ -80,7 +80,7 @@ export default {
         width: 100%;
         display: flex;
         align-items: center;
-        z-index: 999;
+        z-index: 900;
         height: calc
     }
 </style>

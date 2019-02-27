@@ -5,47 +5,20 @@
     :options="swiperOption"
   >
     <!-- slides -->
-    <swiper-slide>
+    <swiper-slide
+      v-for="(item, index) of banner"
+      :key="index"
+    >
       <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b1.jpg"
+        :src="item.imageUrl"
         alt=""
       >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b2.jpg"
-        alt=""
+      <p
+        class="typeTitle"
+        :style="{backgroundColor:item.titleColor}"
       >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b3.jpg"
-        alt=""
-      >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b4.jpg"
-        alt=""
-      >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b5.jpg"
-        alt=""
-      >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="https://www.swiper.com.cn/demo/pcSlide/images/b6.jpg"
-        alt=""
-      >
-    </swiper-slide>
-    <swiper-slide>
-      <img
-        src="http://bbs.swiper.com.cn/forum.php?mod=viewthread&tid=1598&extra="
-        alt=""
-      >
+        {{ item.typeTitle }}
+      </p>
     </swiper-slide>
     <!-- Optional controls -->
     <div
@@ -72,6 +45,7 @@ export default {
   name: 'Carrousel',
   data() {
     return {
+      banner: [],
       swiperOption: {
         effect: 'coverflow',
         slidesPerView: 3,
@@ -80,8 +54,8 @@ export default {
         coverflowEffect: {
           rotate: 30,
           stretch: 10,
-          depth: 60,
-          modifier: 2,
+          depth: 100,
+          modifier: 1,
           slideShadows: true,
         },
         navigation: {
@@ -98,18 +72,37 @@ export default {
     },
   },
   mounted() {
+    $.ajax({
+      url: '/banner',
+      type: 'get',
+      dataType: 'json',
+      success: (data) => {
+        console.log(data.banners)
+        this.banner = data.banners
+      },
+    })
     // current swiper instance
     // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-    // console.log('this is current swiper instance object', this.swiper)
-    // this.swiper.slideTo(3, 1000, false)
+    this.swiper.slideTo(3, 1000, false)
   },
 }
 </script>
 
 <style lang="less" scoped>
     .swiper-slide {
+      margin-top: 50px;
+      position: relative;
         img {
             height: 200px;
+            width: 500px;
+        }
+        .typeTitle {
+          position: absolute;
+          right: 0;
+          bottom: 10px;
+          color: #fff;
+          padding: 5px 40px;
+          border-radius: 50px
         }
     }
 </style>

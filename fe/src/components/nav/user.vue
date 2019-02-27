@@ -6,12 +6,14 @@
     <div class="account">
       账号
     </div>
-    <div class="login">
+    <div
+      class="login"
+    >
       <p>登陆网易云音乐</p>
       <p>手机电脑多端同步,320k高音质无限下载</p>
       <p
         class="login-id"
-        @click="tablogin"
+        @click="closeUser"
       >
         立即登陆
       </p>
@@ -39,7 +41,10 @@
       </p>
       <span class="iconfont icon-icon1" />
     </div>
-    <login v-if="login" />
+    <login
+      v-if="login"
+      @close="tablogin"
+    />
   </div>
   <div
     v-else
@@ -152,6 +157,10 @@ export default {
   methods: {
     tablogin() {
       this.login = !this.login
+    },
+    closeUser() {
+      this.login = !this.login
+      this.$emit('closeUser')
     },
     logout() {
       $.get('/logout', (res) => {

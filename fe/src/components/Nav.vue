@@ -85,7 +85,7 @@
           <span class="iconfont icon-shezhi" />
         </div>
       </div>
-      <user />
+      <user @closeUser="login" />
     </div>
     <div
       v-else

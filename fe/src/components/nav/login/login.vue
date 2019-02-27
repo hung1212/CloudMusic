@@ -1,71 +1,82 @@
 <template>
-  <div id="login">
-    <div
-      v-if="type === 'login'"
-      class="login"
-    >
-      <span class="iconfont icon-guanbi-copy" />
-      <span class="iconfont icon-wangyiyunyinle1" />
-      <p @click="phone">
-        手机号登陆
-      </p>
-      <p @click="email">
-        邮箱登陆
-      </p>
-    </div>
-    <div
-      v-if="type === 'phone'"
-      class="phone"
-    >
-      <span
-        class="iconfont icon-2fanhui"
-        @click="login"
-      />
-      <span class="iconfont icon-guanbi-copy" />
-      <span class="iconfont icon-shouji" />
-      <input
-        v-model="ac"
-        type="search"
-        placeholder="手机号"
+  <div class="mask">
+    <div id="login">
+      <div
+        v-if="type === 'login'"
+        class="login"
       >
-      <input
-        v-model="password"
-        type="password"
-        placeholder="请输入密码"
+        <span
+          class="iconfont icon-guanbi-copy"
+          @click="close"
+        />
+        <span class="iconfont icon-wangyiyunyinle1" />
+        <p @click="phone">
+          手机号登陆
+        </p>
+        <p @click="email">
+          邮箱登陆
+        </p>
+      </div>
+      <div
+        v-if="type === 'phone'"
+        class="phone"
       >
-      <p
-        :class="{active:opacity}"
-        @click="loginadmin"
+        <span
+          class="iconfont icon-2fanhui"
+          @click="login"
+        />
+        <span
+          class="iconfont icon-guanbi-copy"
+          @click="close"
+        />
+        <span class="iconfont icon-shouji" />
+        <input
+          v-model="ac"
+          type="search"
+          placeholder="手机号"
+        >
+        <input
+          v-model="password"
+          type="password"
+          placeholder="请输入密码"
+        >
+        <p
+          :class="{active:opacity}"
+          @click="loginadmin"
+        >
+          登陆
+        </p>
+      </div>
+      <div
+        v-if="type === 'email'"
+        class="email"
       >
-        登陆
-      </p>
-    </div>
-    <div
-      v-if="type === 'email'"
-      class="email"
-    >
-      <span
-        class="iconfont icon-2fanhui"
-        @click="login"
-      />
-      <span class="iconfont icon-guanbi-copy" />
-      <span class="iconfont icon-youxiang2" />
-      <input
-        v-model="ac"
-        type="search"
-        placeholder="请输入邮箱账号"
-      >
-      <input
-        v-model="password"
-        type="password"
-        placeholder="请输入密码"
-      >
-      <p
-        :class="{active:opacity}"
-        @click="loginadmin"
-      >
-        登陆
-      </p>
+        <span
+          class="iconfont icon-2fanhui"
+          @click="login"
+        />
+        <span
+          class="iconfont icon-guanbi-copy"
+          @click="close"
+        />
+        <span class="iconfont icon-youxiang2" />
+        <input
+          v-model="ac"
+          type="search"
+          placeholder="请输入邮箱账号"
+        >
+        <input
+          v-model="password"
+          type="password"
+          placeholder="请输入密码"
+        >
+        <p
+          :class="{active:opacity}"
+          @click="loginadmin"
+        >
+          登陆
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -104,6 +115,9 @@ export default {
     this.password = user[1]
   },
   methods: {
+    close() {
+      this.$emit('close')
+    },
     login() {
       this.type = 'login'
     },
@@ -131,6 +145,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    .mask {
+      background: rgba(0, 0, 0,.5);
+      position: fixed;
+      top:0;
+      left:0;
+      bottom: 0;
+      right: 0;
+      z-index: 999;
+    }
     #login {
         position:fixed;
         top:50%;

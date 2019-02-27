@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <!-- <swiperLrc /> -->
+    <swiperLrc />
     <nominate />
     <div
       v-for="(item,index) of rankView"
@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-// import swiperLrc from './recommend/swiper.vue'
+import swiperLrc from './recommend/swiper.vue'
 import nominate from './recommend/nominate.vue'
 import personalized from './recommend/personalized.vue'
 import privatecontent from './recommend/privatecontent.vue'
@@ -92,7 +92,7 @@ import djprogram from './recommend/djprogram.vue'
 export default {
   name: 'Recommend',
   components: {
-    // swiperLrc,
+    swiperLrc,
     nominate,
     personalized,
     privatecontent,
@@ -153,7 +153,10 @@ export default {
       return index
     },
     defaultRankListEvent() {
-      this.rankModel = this.defaultRankList
+      this.rankModel = []
+      this.$nextTick(() => {
+        this.rankModel = this.defaultRankList
+      })
     },
     confirm() {
       const arr = document.querySelectorAll('.order-list .item > p')
@@ -194,6 +197,7 @@ export default {
       position: fixed;
       top:0;
       left:0;
+      z-index: 999;
       .order-box {
         box-shadow: 0 0 1px #000;
         border: 1px solid #000;
