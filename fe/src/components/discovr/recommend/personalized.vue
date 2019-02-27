@@ -6,7 +6,7 @@
     <div class="discovr-title">
       <div class="left">
         <span class="iconfont icon-rili" />
-        推荐MV
+        推荐歌单
       </div>
       <div class="right">
         更多

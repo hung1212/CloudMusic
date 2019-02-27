@@ -182,8 +182,43 @@
         class="iconfont icon-bofangliebiao"
       />
     </div>
-    <div class="volume">
-      <span class="iconfont icon-yinliang" />
+    <div
+      class="volume"
+    >
+      <span
+        class="iconfont icon-yinliang"
+        @click="volume"
+      />
+      <div
+        v-show="volumeShow"
+        class="volume-box"
+      >
+        <span class="iconfont icon-yinliang" />
+        <div
+          class="dianji"
+          @mousedown="down"
+        >
+          <div
+            ref="width"
+            class="width"
+          >
+            <div
+              ref="wacthNull"
+              class="wacthNull"
+            >
+              <div
+                ref="wacth"
+                class="wacth"
+              >
+                <div
+                  ref="dian"
+                  class="dian"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       class="playList"

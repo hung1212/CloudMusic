@@ -20,12 +20,12 @@
         class="items"
       >
         <div
-          v-for="item of page"
+          v-for="(item, i) of page"
           :key="item.id"
           class="item"
         >
           <span class="i">
-            01
+            {{ (index*5) + i +1 | index }}
           </span>
           <img
             :src="item.song.album.blurPicUrl"
@@ -48,6 +48,13 @@
 <script>
 export default {
   name: 'Newsong',
+  filters: {
+    index(value) {
+      const shi = Math.floor(value / 10)
+      const yi = Math.floor(value % 10)
+      return String(shi) + String(yi)
+    },
+  },
   data() {
     return {
       newsong: [],

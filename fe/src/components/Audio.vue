@@ -81,5 +81,6 @@ export default {
         display: flex;
         align-items: center;
         z-index: 999;
+        height: calc
     }
 </style>
