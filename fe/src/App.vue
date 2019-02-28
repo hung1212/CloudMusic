@@ -4,7 +4,6 @@
   >
     <div
       class="top"
-      :style="{ height: $route.name === 'Lyric'? 'auto' :'calc(100vh - 70px)' }"
     >
       <Nav />
       <router-view class="box" />
@@ -38,8 +37,26 @@ export default {
       // width:1200px;
       // margin:0 auto;
       .top {
-        background:#fafafc;
         display: flex;
+        overflow: auto;
+        height: calc(100vh - 70px);
+        &::-webkit-scrollbar {/*滚动条整体样式*/
+          width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+          height: 1px;
+        }
+        &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 4px;
+            background: rgba(120, 134, 142,.3);
+            &:hover {
+              background: rgba(120, 134, 142,.5);
+            }
+        }
+        &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            border-radius: 4px;
+            background-color: transparent;
+            margin: 0 0;
+
+        }
       }
     }
 </style>

@@ -41,6 +41,9 @@
           </router-link>
         </div>
         <div class="box2 box">
+          <div class="title">
+            我的音乐
+          </div>
           <router-link to="/local">
             <div class="item">
               <span class="iconfont icon-bendiyinle" />
@@ -59,15 +62,6 @@
               最近播放
             </div>
           </router-link>
-        </div>
-        <div class="box3 box">
-          <div class="title">
-            创建的歌单<span class="iconfont icon-jia" />
-          </div>
-          <div class="item">
-            <span class="iconfont icon-xihuan" />
-            我喜欢的音乐
-          </div>
         </div>
       </div>
       <div class="user">
@@ -162,7 +156,7 @@
             我的收藏
           </div>
         </div>
-        <div class="box3 box">
+        <!-- <div class="box3 box">
           <div class="title">
             创建的歌单<span class="iconfont icon-jia" />
           </div>
@@ -179,7 +173,7 @@
             <span class="iconfont icon-xihuan" />
             我喜欢的音乐
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="user">
         <div

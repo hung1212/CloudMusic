@@ -1,55 +1,63 @@
 <template>
   <div class="bg">
     <div class="main">
-      <div
-        class="lry-bg"
-        :style="{backgroundImage: 'url('+store.songInfo.al.picUrl+')'}"
-      />
-      <div class="top">
-        <div class="left">
-          <div
-            id="disk"
-            class="disk"
-            ref="disk"
-            :class="{ diskmove:store.lrc.disk}"
-          >
-            <img
-              :src="store.songInfo.al.picUrl"
-              alt=""
+      <div class="lyric">
+        <div
+          class="lry-bg"
+          :style="{backgroundImage: 'url('+store.songInfo.al.picUrl+')'}"
+        />
+        <div class="top">
+          <div class="left">
+            <div
+              id="disk"
+              ref="disk"
+              class="disk"
+              :class="{ diskmove:store.lrc.disk}"
             >
-          </div>
-        </div>
-        <div class="right">
-          <h4>{{ store.songInfo.name }}</h4>
-          <div class="intro">
-            <p class="album">
-              专辑: <a href="##">
-                {{ store.songInfo.al.name }}
-              </a>
-            </p>
-            <p class="album">
-              歌手: <a href="##">
-                {{ store.songInfo.ar[0].name }}
-              </a>
-            </p>
-            <p class="album">
-              来源: <a href="##" />
-            </p>
+              <img
+                :src="store.songInfo.al.picUrl"
+                alt=""
+              >
+            </div>
           </div>
           <div
-            ref="lrc"
-            class="lrc"
+            class="right"
+            :class="{thumbShow:thumbShow}"
+            @mouseenter="lrcMove"
+            @mouseleave="lrcOut"
           >
-            <p
-              v-for="(value , index) of store.lrc.lyric"
-              :key="index"
-              :class="{active:index === store.lrc.currentLrc.index}"
+            <h4>{{ store.songInfo.name }}</h4>
+            <div class="intro">
+              <p class="album">
+                专辑: <a href="##">
+                  {{ store.songInfo.al.name }}
+                </a>
+              </p>
+              <p class="album">
+                歌手: <a href="##">
+                  {{ store.songInfo.ar[0].name }}
+                </a>
+              </p>
+              <p class="album">
+                来源: <a href="##" />
+              </p>
+            </div>
+            <div
+              ref="lrc"
+              class="lrc"
             >
-              {{ value.lrc }}
-            </p>
+              <p
+                v-for="(value , index) of store.lrc.lyric"
+                :key="index"
+                :class="{active:index === store.lrc.currentLrc.index}"
+              >
+                {{ value.lrc }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
+
       <div class="bottom">
         <comment />
         <div class="right">
@@ -75,6 +83,8 @@ export default {
       store: window.store,
       deg: 0,
       timeID: Number,
+      thumbShow: false,
+      timeFlag: 0,
     }
   },
   watch: {
@@ -93,11 +103,20 @@ export default {
     clearInterval(this.store.timeID)
   },
   methods: {
+    lrcMove() {
+      clearTimeout(this.timeFlag)
+      this.thumbShow = true
+    },
+    lrcOut() {
+      this.timeFlag = setTimeout(() => {
+        this.thumbShow = false
+      }, 10000)
+    },
     disk() {
       this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
       if (!this.store.audioData.tabplay) {
         this.store.timeID = setInterval(() => {
-          this.store.lrc.sum += 0.01
+          this.store.lrc.sum += 0.03
           if (this.store.lrc.sum >= 360) this.store.lrc.sum = 0
           this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
         }, 5)
@@ -110,16 +129,19 @@ export default {
 </script>
 <style lang="less" scoped>
 .bg {
-  background: #d7d8d9;
   width: 100%;
   .main {
-    .lry-bg {
-      height: 500px;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      filter: blur(200px);
-    }
+    background: #d7d8d9;
+    .lyric {
+       position: relative;
+      .lry-bg {
+        width: 100%;
+        height: 500px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        filter: blur(200px);
+      }
     .top {
         width: 1000px;
         position:absolute;
@@ -129,7 +151,7 @@ export default {
         display: flex;
         height: 500px;
         .left {
-          padding-top:20px;
+          padding:20px;
           .disk {
             width: 322px;
             height: 322px;
@@ -137,17 +159,6 @@ export default {
             background-size:600px;
             background-position:-223px -918px;
             position: relative;
-            //  &.diskmove {
-            //     animation: disk 10s linear infinite;
-            //     @keyframes disk {
-            //      0% {
-
-            //      }
-            //      100% {
-            //       transform: rotateZ(360deg)
-            //      }
-            //    }
-            //  }
             img {
               width: 206px;
               height:206px;
@@ -178,9 +189,28 @@ export default {
             }
 
           }
+          &.thumbShow .lrc::-webkit-scrollbar-thumb {
+            background: rgba(120, 134, 142,.2);
+          }
           .lrc {
             height: 400px;
             overflow-x: auto;
+            &::-webkit-scrollbar {/*滚动条整体样式*/
+                width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+                height: 50px;
+            }
+            &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+                border-radius: 4px;
+                background: transparent;
+                &:hover {
+                  background: rgba(120, 134, 142,.5);
+                }
+            }
+            &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+                border-radius: 4px;
+                background: transparent;
+                margin: 0 0;
+            }
             p {
               font-size: 16px;
               line-height: 34px;
@@ -200,6 +230,7 @@ export default {
           width: 300px;
           margin-left: 50px;
         }
+    }
   }
 }
 </style>
