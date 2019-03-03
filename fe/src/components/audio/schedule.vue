@@ -347,7 +347,6 @@ export default {
       } else if (sum <= 0) {
         sum = 0
       }
-      console.log(sum)
       this.$refs.wacth.style.width = `${sum * 100}%`
       this.store.audio.volume = sum
     },

@@ -176,6 +176,7 @@ window.store = {
   audio: null,
   // singerData: null,
   songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
+
   lrc: {
     lyric: null, // 歌词
     currentLrc: {}, // 当前显示的一句歌词
@@ -200,13 +201,15 @@ window.store = {
   user: {
     profile: null,
     userLogin: null,
+
     // 登陆用户
-    status() {
+    status(fn) {
       $.get('/login/status', (res) => {
         if (res.code === 200) {
           window.store.user.userLogin = res.profile
           window.store.user.detail()
           window.store.user.subcount()
+          fn()
         }
       })
     },

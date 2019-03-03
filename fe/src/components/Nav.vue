@@ -12,7 +12,6 @@
           <router-link to="/">
             <div
               class="item active"
-              @click="currentItme"
             >
               <span class="iconfont icon-sousuo" />
               搜索
@@ -21,7 +20,6 @@
           <router-link to="/discovr/recommend">
             <div
               class="item"
-              @click="currentItme"
             >
               <span class="iconfont icon-yinle" />
               发现音乐
@@ -93,7 +91,6 @@
           <router-link to="/">
             <div
               class="item active"
-              @click="currentItme"
             >
               <span class="iconfont icon-sousuo" />
               搜索
@@ -102,7 +99,6 @@
           <router-link to="/discovr/recommend">
             <div
               class="item"
-              @click="currentItme"
             >
               <span class="iconfont icon-yinle" />
               发现音乐
@@ -156,7 +152,7 @@
             我的收藏
           </div>
         </div>
-        <!-- <div class="box3 box">
+        <div class="box3 box">
           <div class="title">
             创建的歌单<span class="iconfont icon-jia" />
           </div>
@@ -169,11 +165,15 @@
           <div class="title">
             收藏的歌单
           </div>
-          <div class="item">
+          <div
+            v-for="item of songList"
+            :key="item.id"
+            class="item"
+          >
             <span class="iconfont icon-xihuan" />
-            我喜欢的音乐
+            {{ item.name }}
           </div>
-        </div> -->
+        </div>
       </div>
       <div class="user">
         <div
@@ -209,10 +209,11 @@ export default {
     return {
       store: window.store,
       show: false,
+      songList: [],
     }
   },
   mounted() {
-    this.store.user.status()
+    this.store.user.status(this.getsongList)
   },
   methods: {
     login() {
@@ -224,8 +225,19 @@ export default {
         $('#user').animate({ right: '0' }, 200)
       }
     },
-    currentItme() {
-
+    getsongList() {
+      $.ajax({
+        url: '/user/playlist',
+        type: 'get',
+        dataType: 'json',
+        data: { uid: this.store.user.userLogin.userId },
+        success: (data) => {
+          if (data.code === 200) {
+            this.songList = data.playlist
+            console.log(this.songList)
+          }
+        },
+      })
     },
   },
 }
@@ -267,6 +279,9 @@ export default {
                 .item {
                     line-height: 40px;
                     padding-left: 15px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                     span {
                         padding-right: 15px;
                     }

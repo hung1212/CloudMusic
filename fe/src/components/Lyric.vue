@@ -116,7 +116,7 @@ export default {
       this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
       if (!this.store.audioData.tabplay) {
         this.store.timeID = setInterval(() => {
-          this.store.lrc.sum += 0.03
+          this.store.lrc.sum += 0.05
           if (this.store.lrc.sum >= 360) this.store.lrc.sum = 0
           this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
         }, 5)

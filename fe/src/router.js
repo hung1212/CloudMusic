@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Search from './components/Search.vue'
 import Discovr from './components/Discovr.vue'
+import SongListDetails from './components/SongListDetails.vue'
 import Lyric from './components/Lyric.vue'
 import MV from './components/MV.vue'
 import Friend from './components/Friend.vue'
@@ -27,6 +28,11 @@ export default new VueRouter({
       path: '/lyric',
       name: 'Lyric',
       component: Lyric,
+    },
+    {
+      path: '/songlistdetails',
+      name: 'SongListDetails',
+      component: SongListDetails,
     },
     {
       path: '/discovr',

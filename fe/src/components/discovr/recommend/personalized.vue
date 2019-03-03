@@ -23,6 +23,7 @@
           v-for="item of page"
           :key="item.id"
           class="item"
+          @click="$router.push({name:'SongListDetails', query: {id:item.id}})"
         >
           <div class="img">
             <img
