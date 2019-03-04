@@ -50,5 +50,6 @@ export default {
     .song-list-details {
         flex: 1;
         padding: 20px;
+        overflow: auto;
     }
 </style>

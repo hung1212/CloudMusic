@@ -137,10 +137,10 @@
               <span class="iconfont icon-gengduosandian" />
             </div>
             <div class="singer">
-              {{ item.artists[0].name }}
+              {{ item.ar[0].name }}
             </div>
             <div class="time">
-              {{ item.duration | totalTime }}
+              {{ item.dt | totalTime }}
             </div>
             <div class="clear">
               <span

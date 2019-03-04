@@ -35,11 +35,6 @@ window.actions = {
       }
     })
     window.actions.lyric(item)
-    const playList = window.store.storage.playList
-    if (playList.findIndex(value => value.id === item.id) === -1) {
-      playList.unshift(item)
-    }
-    localStorage.playList = JSON.stringify(window.store.storage.playList)
   },
   lyric(item) {
     // 获取歌曲歌词
@@ -71,6 +66,11 @@ window.actions = {
     $.get('/song/detail', { ids: item.id }, (res) => {
       window.store.songInfo = res.songs[0]
       localStorage.songInfo = JSON.stringify(window.store.songInfo)
+      const playList = window.store.storage.playList
+      if (playList.findIndex(value => value.id === item.id) === -1) {
+        playList.unshift(window.store.songInfo)
+      }
+      localStorage.playList = JSON.stringify(window.store.storage.playList)
     })
   },
   previous() {
