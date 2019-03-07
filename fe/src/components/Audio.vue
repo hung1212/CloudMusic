@@ -44,12 +44,9 @@ export default {
       this.store.lrc.diskFalse = true
       this.store.audioData.width = `${this.store.audio.currentTime * 1000 / window.store.songInfo.dt * 100}%`
       this.store.lrc.currentLrc = this.store.lrc.lyric.find((ele, i, arr) => {
-        let flag = true
-        if (i === arr.length - 2) {
-          flag = false
-          return ele
-        }
-        if (flag) { return this.store.audio.currentTime * 1000 <= arr[i + 1].time }
+        if (i === arr.length - 1) return true
+        return this.store.audio.currentTime * 1000 < arr[i + 1].time
+        // if (flag) { return this.store.audio.currentTime * 1000 > arr[i].time }
       })
       if (this.store.audio.ended) {
         if (this.store.audioData.schema === 2) {

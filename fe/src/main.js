@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import jquery from 'jquery'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
 import App from './App.vue'
 import router from './router'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
 import './assets/less/pack.less'
 import 'swiper/dist/css/swiper.css'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
 // import VueRouter from 'vue-router'
 // import 'font-awesome/scss/font-awesome.scss'
 window.$ = jquery
@@ -46,15 +46,18 @@ window.actions = {
         const time = min + sec + msec
         return time
       }
-      window.store.lrc.lyric = res.lrc.lyric.split('\n')
-      window.store.lrc.lyric.forEach((ele, i, array) => {
+      const lyric = res.lrc.lyric.split('\n')
+      window.store.lrc.lyric = []
+      lyric.forEach((ele) => {
         const a = ele.split(']')
         const time = timeMsec(a[0])
-        const obj = {}
-        obj.time = time
-        obj.lrc = a[1]
-        obj.index = i
-        array[i] = obj
+        if (a[1]) {
+          const obj = {}
+          obj.time = time
+          obj.lrc = a[1]
+          obj.index = window.store.lrc.lyric.length
+          window.store.lrc.lyric.push(obj)
+        }
       })
     })
   },
@@ -67,7 +70,8 @@ window.actions = {
       window.store.songInfo = res.songs[0]
       localStorage.songInfo = JSON.stringify(window.store.songInfo)
       const playList = window.store.storage.playList
-      if (playList.findIndex(value => value.id === item.id) === -1) {
+      const index = playList.findIndex(value => value.id === item.id)
+      if (index === -1) {
         playList.unshift(window.store.songInfo)
       }
       localStorage.playList = JSON.stringify(window.store.storage.playList)

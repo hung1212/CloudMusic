@@ -34,7 +34,10 @@
             {{ index + 1 | itemIndex }}
           </span>
           <span class="like iconfont icon-xihuan" />
-          <span class="iconfont icon-yinliang" />
+          <span
+            v-if="store.songInfo && store.songInfo.id === item.id"
+            class="iconfont icon-yinliang"
+          />
           <p class="name">
             {{ item.name }}
             <span
@@ -195,8 +198,7 @@ export default {
                       }
                     }
                     .icon-bofang1,
-                    .icon-gengduosandian,
-                    .icon-yinliang,{
+                    .icon-gengduosandian{
                         display: none;
                         font-size: 18px;
                         margin-right: 10px;
@@ -204,6 +206,9 @@ export default {
                     }
                     .icon-yinliang {
                         color: #c32d2e;
+                        font-size: 18px;
+                        margin-right: 10px;
+                        width: 20px;
                     }
 
                 }

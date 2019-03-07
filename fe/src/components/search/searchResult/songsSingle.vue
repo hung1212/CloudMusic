@@ -38,7 +38,10 @@
         >
           <div>
             <p class="name">
-              <span class="iconfont icon-yinliang" />
+              <span
+                v-if="store.songInfo && store.songInfo.id === item.id"
+                class="iconfont icon-yinliang"
+              />
               <span
                 class="songname"
                 :title="item.name"
@@ -206,8 +209,7 @@ export default {
         }
       }
       .icon-bofang1,
-      .icon-gengduosandian,
-      .icon-yinliang,{
+      .icon-gengduosandian{
          display: none;
          font-size: 18px;
            margin-right: 10px;
@@ -215,6 +217,9 @@ export default {
        }
        .icon-yinliang {
          color: #c32d2e;
+         font-size: 18px;
+          margin-right: 10px;
+          width: 20px;
        }
       div {
         display: flex;

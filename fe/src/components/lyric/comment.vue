@@ -39,6 +39,7 @@
           >
             <div class="left">
               <img
+                v-if="item.user"
                 :src="item.user.avatarUrl"
                 alt=""
               >
@@ -83,6 +84,7 @@
           >
             <div class="left">
               <img
+                v-if="item.user"
                 :src="item.user.avatarUrl"
                 alt=""
               >

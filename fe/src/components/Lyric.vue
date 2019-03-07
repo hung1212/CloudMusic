@@ -1,6 +1,9 @@
 <template>
   <div class="bg">
-    <div class="main">
+    <div
+      v-if="store.songInfo"
+      class="main"
+    >
       <div class="lyric">
         <div
           class="lry-bg"
@@ -44,14 +47,14 @@
             </div>
             <div
               ref="lrc"
-              class="lrc"
+              class="lrc scrollbar"
             >
               <p
                 v-for="(value , index) of store.lrc.lyric"
                 :key="index"
                 :class="{active:index === store.lrc.currentLrc.index}"
               >
-                {{ value.lrc }}
+                {{ index }}:{{ value.lrc }}:{{ store.lrc.currentLrc.index }}
               </p>
             </div>
           </div>
@@ -88,9 +91,19 @@ export default {
     }
   },
   watch: {
-    'store.lrc.currentLrc': function () {
-      this.$refs.lrc.scrollTop += 34
+    // eslint-disable-next-line
+    'store.songInfo': function () {
+      if (!window.store.songInfo) {
+        this.$router.push({
+          name: 'Search',
+        })
+      }
     },
+    // eslint-disable-next-line
+    'store.lrc.currentLrc': function () {
+      this.$refs.lrc.scrollTop += 30
+    },
+    // eslint-disable-next-line
     'store.audioData.tabplay': function () {
       this.disk()
     },
@@ -119,11 +132,21 @@ export default {
           this.store.lrc.sum += 0.05
           if (this.store.lrc.sum >= 360) this.store.lrc.sum = 0
           this.$refs.disk.style.transform = `rotateZ(${this.store.lrc.sum}deg)`
-        }, 5)
+        }, 1)
       } else {
         clearInterval(this.store.timeID)
       }
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log(to, from)
+    if (window.store.songInfo) {
+      next()
+    } else {
+      next({
+        name: 'Search',
+      })
+    }
   },
 }
 </script>
@@ -140,7 +163,8 @@ export default {
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        filter: blur(200px);
+        -webkit-filter:blur(120px);
+        filter: blur(120px);
       }
     .top {
         width: 1000px;
@@ -195,25 +219,15 @@ export default {
           .lrc {
             height: 400px;
             overflow-x: auto;
-            &::-webkit-scrollbar {/*滚动条整体样式*/
-                width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
-                height: 50px;
+            &::-webkit-scrollbar-track {
+              background: transparent;
             }
-            &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-                border-radius: 4px;
-                background: transparent;
-                &:hover {
-                  background: rgba(120, 134, 142,.5);
-                }
-            }
-            &::-webkit-scrollbar-track {/*滚动条里面轨道*/
-                border-radius: 4px;
-                background: transparent;
-                margin: 0 0;
+            &::-webkit-scrollbar-thumb {
+              background: transparent;
             }
             p {
               font-size: 16px;
-              line-height: 34px;
+              padding: 10px 0;
               &.active {
                 color: #fff;
               }

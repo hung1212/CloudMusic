@@ -50,7 +50,10 @@
               ...更多
             </button>
           </div>
-          <div class="labels">
+          <div
+            v-if="info.tags.length > 0"
+            class="labels"
+          >
             标签: <span
               v-for="(tags,index) of info.tags"
               :key="index"
@@ -65,6 +68,13 @@
             </span>
           </div>
           <div
+            v-else
+            class="labels"
+          >
+            标签:暂无标签
+          </div>
+          <div
+            v-if="info.description"
             class="intro"
             :class="{active:intro}"
           >
@@ -81,6 +91,15 @@
               class="xiala iconfont icon-arrow-down"
               @click="intro = ! intro"
             />
+          </div>
+          <div
+            v-else
+            class="intro"
+            :class="{active:intro}"
+          >
+            <p>
+              介绍:暂无介绍
+            </p>
           </div>
         </div>
       </div>
@@ -135,6 +154,7 @@ export default {
           background-size:100% 100px;
           background-repeat: no-repeat;
           background-position-y: 0;
+          -webkit-filter: blur(100px);
           filter: blur(100px);
           pointer-events: none;
       }

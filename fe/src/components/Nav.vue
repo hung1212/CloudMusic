@@ -156,7 +156,10 @@
           <div class="title">
             创建的歌单<span class="iconfont icon-jia" />
           </div>
-          <div class="item">
+          <div
+            class="item"
+            @click="$router.push({name:'SongListDetails',query:{id:songList[0].id}})"
+          >
             <span class="iconfont icon-xihuan" />
             我喜欢的音乐
           </div>
@@ -165,14 +168,19 @@
           <div class="title">
             收藏的歌单
           </div>
-          <div
-            v-for="item of songList"
-            :key="item.id"
-            class="item"
+          <template
+            v-for="(item,index) of songList"
           >
-            <span class="iconfont icon-xihuan" />
-            {{ item.name }}
-          </div>
+            <div
+              v-if="index!==0"
+              :key="item.id"
+              class="item"
+              @click="$router.push({name:'SongListDetails',query:{id:item.id}})"
+            >
+              <span class="iconfont icon-xihuan" />
+              {{ item.name }}
+            </div>
+          </template>
         </div>
       </div>
       <div class="user">
@@ -234,7 +242,6 @@ export default {
         success: (data) => {
           if (data.code === 200) {
             this.songList = data.playlist
-            console.log(this.songList)
           }
         },
       })

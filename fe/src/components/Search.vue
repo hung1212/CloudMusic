@@ -60,9 +60,10 @@ export default {
   },
   watch: {
     searchKeyword(value) {
-      $.get('/search/suggest', { keywords: value }, (res) => {
-        console.log(res)
-      })
+      // 搜索框建议
+      // $.get('/search/suggest', { keywords: value }, (res) => {
+      //   console.log(res)
+      // })
       if (value === '') this.cut = false
     },
   },
@@ -107,6 +108,7 @@ export default {
       // 获取歌曲
       $.get('/search', { keywords: this.searchKeyword, type: this.searchTypeTab, limit: 50 }, (res) => {
         if (res.code === 200) {
+          console.log(res.result)
           this.result = res.result
           this.loading = false
         }
@@ -121,6 +123,8 @@ export default {
   padding: 20px 25px;
   flex:1;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   .searchbox {
     width: 100%;
     height: 40px;
@@ -143,9 +147,14 @@ export default {
       cursor: pointer;
     }
   }
-  .searchdata {
-    display: flex;
-    justify-content: space-between;
+  .auto {
+    overflow: auto;
+    flex: 1;
+    .searchdata {
+      display: flex;
+      justify-content: space-between;
+    }
   }
+
 }
 </style>

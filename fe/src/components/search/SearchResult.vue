@@ -69,7 +69,7 @@
     </div>
     <div
       v-else
-      class="show"
+      class="show scrollbar"
     >
       <songsSingle
         v-if="searchTypeTab === 1"
@@ -141,8 +141,12 @@ export default {
 
 <style lang="less" scoped>
 .search-result {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   .search-result-title {
-    display: flex;
+    display:-webkit-box;
+    // display: flex;
     font-size: 16px;
     border-bottom: 2px solid #666;
     margin-bottom: 30px;
@@ -172,7 +176,6 @@ export default {
   }
   .show {
     overflow: auto;
-    height: calc(100vh - 206px);
   }
 }
 </style>

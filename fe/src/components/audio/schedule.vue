@@ -377,6 +377,7 @@ export default {
       this.store.audio.pause()
       this.store.storage.playList = []
       this.store.songInfo = null
+      localStorage.removeItem('songInfo')
       this.store.audio.src = ''
       this.store.audioData.tabplay = true
     },
@@ -390,6 +391,7 @@ export default {
         } else {
           this.store.storage.playList = []
           this.store.songInfo = null
+          localStorage.removeItem('songInfo')
           this.store.audio.src = ''
           this.store.audioData.tabplay = true
         }
