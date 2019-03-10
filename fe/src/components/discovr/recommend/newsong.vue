@@ -103,7 +103,9 @@ export default {
     dblsong(item) {
       this.currentplay = item
       window.actions.play(item)
-      window.actions.songInfo(item)
+      console.log(this.$store)
+      this.$store.dispatch('songInfo', item)
+      // window.actions.songInfo(item)
     },
   },
 }

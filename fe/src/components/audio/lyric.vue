@@ -1,11 +1,11 @@
 <template>
   <div
-    v-if="store.storage.playList.length > 0 && store.songInfo"
+    v-if="$store.state.songInfo"
     class="img"
     @click="back"
   >
     <img
-      :src="store.songInfo.al.picUrl"
+      :src="$store.state.songInfo.al.picUrl"
       alt="stort"
     >
   </div>

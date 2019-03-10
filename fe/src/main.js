@@ -3,6 +3,7 @@ import jquery from 'jquery'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
 import './assets/less/pack.less'
@@ -65,18 +66,18 @@ window.actions = {
     window.store.storage.playList.splice(i, 1)
     localStorage.playList = JSON.stringify(window.store.storage.playList)
   },
-  songInfo(item) {
-    $.get('/song/detail', { ids: item.id }, (res) => {
-      window.store.songInfo = res.songs[0]
-      localStorage.songInfo = JSON.stringify(window.store.songInfo)
-      const playList = window.store.storage.playList
-      const index = playList.findIndex(value => value.id === item.id)
-      if (index === -1) {
-        playList.unshift(window.store.songInfo)
-      }
-      localStorage.playList = JSON.stringify(window.store.storage.playList)
-    })
-  },
+  // songInfo(item) {
+  //   $.get('/song/detail', { ids: item.id }, (res) => {
+  //     window.store.songInfo = res.songs[0]
+  //     localStorage.songInfo = JSON.stringify(window.store.songInfo)
+  //     const playList = window.store.storage.playList
+  //     const index = playList.findIndex(value => value.id === item.id)
+  //     if (index === -1) {
+  //       playList.unshift(window.store.songInfo)
+  //     }
+  //     localStorage.playList = JSON.stringify(window.store.storage.playList)
+  //   })
+  // },
   previous() {
     if (window.store.audioData.schema === 1) { // 1是列表循环
       window.store.storage.playList.forEach((ele, i, arr) => {
@@ -91,9 +92,6 @@ window.actions = {
         }
       })
     } else if (window.store.audioData.schema === 2) { // 2是单曲播放
-
-      // window.store.audio.currentTime = 0
-      // window.actions.play(window.store.songInfo)
     } else if (window.store.audioData.schema === 3) { // 3是随机播放
       window.store.storage.playList.forEach((ele, i, arr) => {
         let ran = ''
@@ -179,7 +177,7 @@ window.store = {
   actions: window.actions,
   audio: null,
   // singerData: null,
-  songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
+  // songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : null,
 
   lrc: {
     lyric: null, // 歌词
@@ -200,7 +198,7 @@ window.store = {
     // playsbox: true,
   },
   storage: {
-    playList: localStorage.playList ? JSON.parse(localStorage.playList) : [],
+    playList: [],
   },
   user: {
     profile: null,
@@ -239,5 +237,6 @@ Vue.config.productionTip = false
 Vue.use(VueAwesomeSwiper)
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

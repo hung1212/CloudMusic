@@ -12,7 +12,8 @@ module.exports = {
     },
     "rules": {
         "semi": ["error", "never"],
-        "prefer-destructuring": 0
+        "prefer-destructuring": 0,
+        "no-param-reassign": 0
     },
     "parserOptions": {
         "parser": "babel-eslint"

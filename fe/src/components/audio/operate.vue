@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="store.storage.playList.length > 0 && store.songInfo"
+    v-if="store2.state.songInfo"
     class="info"
   >
     <div class="song">
@@ -8,20 +8,20 @@
         <span
           class="songname"
         >
-          {{ store.songInfo.name }}
+          {{ store2.state.songInfo.name }}
         </span>
         -
         <span class="name">
-          {{ store.songInfo.ar[0].name }}
+          {{ store2.state.songInfo.ar[0].name }}
         </span>
       </div>
       <div class="right">
         <span class="start">
-          {{ store.songInfo.dt | curTime }}
+          {{ store2.state.songInfo.dt | curTime }}
         </span>
         /
         <span class="end">
-          {{ store.songInfo.dt | totalTime }}
+          {{ store2.state.songInfo.dt | totalTime }}
         </span>
       </div>
     </div>
@@ -33,7 +33,10 @@
         ref="bur"
         class="progress"
       >
-        <div class="width" ref="width">
+        <div
+          ref="width"
+          class="width"
+        >
           <div
             ref="wacth"
             class="wacth"
@@ -44,7 +47,7 @@
               class="dian"
             />
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +75,10 @@
         ref="bur"
         class="progress"
       >
-        <div class="width" ref="width">
+        <div
+          ref="width"
+          class="width"
+        >
           <div
             ref="wacth"
             class="wacth"
@@ -82,7 +88,7 @@
               class="dian"
             />
           </div>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
@@ -95,9 +101,9 @@ export default {
   filters: {
     curTime(time) {
       if (!window.store.audio) return '00:00'
-      if (!window.store.songInfo.dt) return '00:00'
+      if (!time) return '00:00'
       // eslint-disable-next-line
-      const store = (time / 1000) * (window.store.audio.currentTime * 1000 / window.store.songInfo.dt)
+      const store = (time / 1000) * (window.store.audio.currentTime * 1000 / time)
       const m = String(Math.floor((store / 60) / 10)) + String(Math.floor((store / 60) % 10))
       const s = String(Math.floor((store % 60) / 10)) + String(Math.floor(store % 60 % 10))
       return `${m}:${s}`
@@ -112,6 +118,7 @@ export default {
   data() {
     return {
       store: window.store,
+      store2: this.$store,
       wacthWidth: '',
       downX: '',
       currentTime: '',
@@ -140,7 +147,7 @@ export default {
       this.downX = e.clientX - this.$refs.bur.getBoundingClientRect().left
       const width = (this.downX - this.$refs.dian.offsetWidth / 2) / this.$refs.width.offsetWidth
       this.$refs.wacth.style.width = `${width * 100}%`
-      this.store.audio.currentTime = width * window.store.songInfo.dt / 1000
+      this.store.audio.currentTime = width * this.store2.state.songInfo.dt / 1000
       document.addEventListener('mousemove', this.a)
       document.addEventListener('mouseup', this.b)
       if (e.target === this.$refs.dian) return
@@ -150,7 +157,7 @@ export default {
       this.upPlay = true
       const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.downX
       this.ratio = moveX / this.$refs.width.offsetWidth
-      this.store.audio.currentTime = this.ratio * window.store.songInfo.dt / 1000
+      this.store.audio.currentTime = this.ratio * this.store2.state.songInfo.dt / 1000
       this.store.audioData.width = `${this.ratio * 100}%`
       if (moveX >= this.$refs.width.offsetWidth) this.up()
     },
@@ -165,7 +172,7 @@ export default {
       this.store.audioData.curflag = true
       this.store.audioData.tabplay = false
       if (!this.store.audioData.src) {
-        window.actions.play(this.store.songInfo, () => {
+        window.actions.play(this.store2.state.songInfo, () => {
           // eslint-disable-next-line
           this.store.audioData.curflag = true
         })
@@ -177,7 +184,7 @@ export default {
       this.store.audioData.curflag = true
       this.store.audioData.tabplay = false
       if (!this.store.audioData.src) {
-        window.actions.play(this.store.songInfo, () => {
+        window.actions.play(this.store2.state.songInfo, () => {
           // eslint-disable-next-line
           this.store.audioData.curflag = true
           this.moveClient(e)
@@ -192,7 +199,7 @@ export default {
     moveClient(e) {
       if (!e) return
       const client = e.clientX - this.$refs.bur.getBoundingClientRect().left
-      this.store.audio.currentTime = (this.wacthWidth + (client - this.downX)) / this.$refs.width.offsetWidth * window.store.songInfo.dt / 1000
+      this.store.audio.currentTime = (this.wacthWidth + (client - this.downX)) / this.$refs.width.offsetWidth * this.store2.state.songInfo.dt / 1000
     },
   },
 }
