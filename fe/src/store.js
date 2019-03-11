@@ -5,8 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : [],
-    playList: localStorage.playList ? JSON.parse(localStorage.playList) : {},
+    songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : {},
+    playList: localStorage.playList ? JSON.parse(localStorage.playList) : [],
   },
   mutations: {
     setSongInfo(state, item) {

@@ -65,37 +65,28 @@ window.actions = {
     })
   },
   playsDelete(arr, i) {
-    window.store.storage.playList.splice(i, 1)
-    localStorage.playList = JSON.stringify(window.store.storage.playList)
+    store.state.playList.splice(i, 1)
+    localStorage.playList = JSON.stringify(store.state.playList)
   },
-  // songInfo(item) {
-  //   $.get('/song/detail', { ids: item.id }, (res) => {
-  //     window.store.songInfo = res.songs[0]
-  //     localStorage.songInfo = JSON.stringify(window.store.songInfo)
-  //     const playList = window.store.storage.playList
-  //     const index = playList.findIndex(value => value.id === item.id)
-  //     if (index === -1) {
-  //       playList.unshift(window.store.songInfo)
-  //     }
-  //     localStorage.playList = JSON.stringify(window.store.storage.playList)
-  //   })
-  // },
   previous() {
+    let nextIndex = -1
     if (window.store.audioData.schema === 1) { // 1是列表循环
-      window.store.storage.playList.forEach((ele, i, arr) => {
-        if (ele.id === window.store.songInfo.id) {
+      store.state.playList.forEach((ele, i, arr) => {
+        if (ele.id === store.state.songInfo.id) {
           if (i === 0) {
-            window.actions.play(arr[arr.length - 1])
-            window.actions.songInfo(arr[arr.length - 1])
+            nextIndex = arr.length - 1
+            // window.actions.play(arr[arr.length - 1])
+            // store.dispatch('songInfo', (arr[arr.length - 1]))
           } else {
-            window.actions.play(arr[i - 1])
-            window.actions.songInfo(arr[i - 1])
+            nextIndex = i - 1
+            // window.actions.play(arr[i - 1])
+            // store.dispatch('songInfo', (arr[i - 1]))
           }
         }
       })
     } else if (window.store.audioData.schema === 2) { // 2是单曲播放
     } else if (window.store.audioData.schema === 3) { // 3是随机播放
-      window.store.storage.playList.forEach((ele, i, arr) => {
+      store.state.playList.forEach((ele, i, arr) => {
         let ran = ''
         function random() {
           ran = Math.floor(Math.random() * arr.length)
@@ -103,49 +94,60 @@ window.actions = {
             random()
           }
         }
-        if (ele.id === window.store.songInfo.id) {
+        if (ele.id === store.state.songInfo.id) {
           random()
-          window.actions.play(arr[ran])
-          window.actions.songInfo(arr[ran])
+          nextIndex = ran
+
+          // window.actions.play(arr[ran])
+          // store.dispatch('songInfo', (arr[ran]))
         }
       })
     } else if (window.store.audioData.schema === 4) { // 4是顺序播放
-      window.store.storage.playList.forEach((ele, i, arr) => {
-        if (ele.id === window.store.songInfo.id) {
+      store.state.playList.forEach((ele, i, arr) => {
+        if (ele.id === store.state.songInfo.id) {
           if (arr.length - 1 === i) return
-          window.actions.play(arr[i + 1])
-          window.actions.songInfo(arr[i + 1])
+          nextIndex = i + 1
+          // window.actions.play(arr[i + 1])
+          // store.dispatch('songInfo', (arr[i + 1]))
         }
       })
     }
+    if (nextIndex !== -1) {
+      window.actions.play(store.state.playList[nextIndex])
+      store.dispatch('songInfo', store.state.playList[nextIndex])
+    }
   },
   next() {
+    let nextIndex = -1
     if (window.store.audioData.schema === 1) { // 1是列表循环
-      window.store.storage.playList.forEach((ele, i, arr) => {
-        if (ele.id === window.store.songInfo.id) {
+      console.log(Vue)
+      store.state.playList.forEach((ele, i, arr) => {
+        if (ele.id === store.state.songInfo.id) {
           if (arr.length - 1 === i) {
-            window.actions.play(arr[0])
-            window.actions.songInfo(arr[0])
+            nextIndex = 0
+            // window.actions.play(arr[0])
+            // store.dispatch('songInfo', (arr[0]))
           } else {
             window.actions.play(arr[i + 1])
-            window.actions.songInfo(arr[i + 1])
+            store.dispatch('songInfo', (arr[i + 1]))
           }
         }
       })
     } else if (window.store.audioData.schema === 2) { // 2是单曲播放
-      window.store.storage.playList.forEach((ele, i, arr) => {
-        if (ele.id === window.store.songInfo.id) {
+      store.state.playList.forEach((ele, i, arr) => {
+        if (ele.id === store.state.songInfo.id) {
           if (i === 0) {
+            nextIndex = arr.length - 1
             window.actions.play(arr[arr.length - 1])
-            window.actions.songInfo(arr[arr.length - 1])
+            store.dispatch('songInfo', (arr[arr.length - 1]))
           } else {
             window.actions.play(arr[i - 1])
-            window.actions.songInfo(arr[i - 1])
+            store.dispatch('songInfo', (arr[i - 1]))
           }
         }
       })
     } else if (window.store.audioData.schema === 3) { // 3是随机播放
-      window.store.storage.playList.forEach((ele, i, arr) => {
+      store.state.playList.forEach((ele, i, arr) => {
         let ran = ''
         function random() {
           ran = Math.floor(Math.random() * arr.length)
@@ -153,20 +155,26 @@ window.actions = {
             random()
           }
         }
-        if (ele.id === window.store.songInfo.id) {
+        if (ele.id === store.state.songInfo.id) {
+          nextIndex = ran
           random()
-          window.actions.play(arr[ran])
-          window.actions.songInfo(arr[ran])
+          // window.actions.play(arr[ran])
+          // store.dispatch('songInfo', (arr[ran]))
         }
       })
     } else if (window.store.audioData.schema === 4) { // 4是顺序播放
-      window.store.storage.playList.forEach((ele, i, arr) => {
-        if (ele.id === window.store.songInfo.id) {
+      store.state.playList.forEach((ele, i, arr) => {
+        if (ele.id === store.state.songInfo.id) {
           if (arr.length - 1 === i) return
-          window.actions.play(arr[i + 1])
-          window.actions.songInfo(arr[i + 1])
+          nextIndex = i + 1
+          // window.actions.play(arr[i + 1])
+          // store.dispatch('songInfo', (arr[i + 1]))
         }
       })
+    }
+    if (nextIndex !== -1) {
+      window.actions.play(store.state.playList[nextIndex])
+      store.dispatch('songInfo', store.state.playList[nextIndex])
     }
   },
 }

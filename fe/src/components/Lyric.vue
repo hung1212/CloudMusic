@@ -97,14 +97,6 @@ export default {
   },
   watch: {
     // eslint-disable-next-line
-    'songInfo': function () {
-      if (!window.songInfo) {
-        this.$router.push({
-          name: 'Search',
-        })
-      }
-    },
-    // eslint-disable-next-line
     'store.lrc.currentLrc': function () {
       this.$refs.lrc.scrollTop += 30
     },
@@ -143,15 +135,15 @@ export default {
       }
     },
   },
-  beforeRouteEnter(to, from, next) {
-    if (localStorage.songInfo) {
-      next()
-    } else {
-      next({
-        name: 'Search',
-      })
-    }
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   if (localStorage.songInfo) {
+  //     next()
+  //   } else {
+  //     next({
+  //       name: 'Search',
+  //     })
+  //   }
+  // },
 }
 </script>
 <style lang="less" scoped>
