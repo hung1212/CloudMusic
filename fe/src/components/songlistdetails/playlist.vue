@@ -35,7 +35,7 @@
           </span>
           <span class="like iconfont icon-xihuan" />
           <span
-            v-if="store.songInfo && store.songInfo.id === item.id"
+            v-if="songInfo && songInfo.id === item.id"
             class="iconfont icon-yinliang"
           />
           <p class="name">
@@ -81,7 +81,6 @@ export default {
       return arr.join('/')
     },
   },
-
   props: {
     playlist: {
       type: Array,
@@ -97,6 +96,11 @@ export default {
       currentplay: null,
     }
   },
+  computed: {
+    songInfo() {
+      return this.$store.state.songInfo
+    },
+  },
   methods: {
     song(item) {
       this.currentItem = item
@@ -104,7 +108,7 @@ export default {
     dblsong(item) {
       this.currentplay = item
       window.actions.play(item)
-      window.actions.songInfo(item)
+      this.$store.dispatch('songInfo', item)
     },
   },
 }

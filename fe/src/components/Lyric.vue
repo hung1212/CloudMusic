@@ -1,13 +1,13 @@
 <template>
   <div class="bg">
     <div
-      v-if="store.songInfo"
+      v-if="songInfo"
       class="main"
     >
       <div class="lyric">
         <div
           class="lry-bg"
-          :style="{backgroundImage: 'url('+store.songInfo.al.picUrl+')'}"
+          :style="{backgroundImage: 'url('+songInfo.al.picUrl+')'}"
         />
         <div class="top">
           <div class="left">
@@ -18,7 +18,7 @@
               :class="{ diskmove:store.lrc.disk}"
             >
               <img
-                :src="store.songInfo.al.picUrl"
+                :src="songInfo.al.picUrl"
                 alt=""
               >
             </div>
@@ -29,16 +29,16 @@
             @mouseenter="lrcMove"
             @mouseleave="lrcOut"
           >
-            <h4>{{ store.songInfo.name }}</h4>
+            <h4>{{ songInfo.name }}</h4>
             <div class="intro">
               <p class="album">
                 专辑: <a href="##">
-                  {{ store.songInfo.al.name }}
+                  {{ songInfo.al.name }}
                 </a>
               </p>
               <p class="album">
                 歌手: <a href="##">
-                  {{ store.songInfo.ar[0].name }}
+                  {{ songInfo.ar[0].name }}
                 </a>
               </p>
               <p class="album">
@@ -90,10 +90,15 @@ export default {
       timeFlag: 0,
     }
   },
+  computed: {
+    songInfo() {
+      return this.$store.state.songInfo
+    },
+  },
   watch: {
     // eslint-disable-next-line
-    'store.songInfo': function () {
-      if (!window.store.songInfo) {
+    'songInfo': function () {
+      if (!window.songInfo) {
         this.$router.push({
           name: 'Search',
         })
@@ -109,7 +114,7 @@ export default {
     },
   },
   mounted() {
-    window.actions.lyric(this.store.songInfo)
+    window.actions.lyric(this.songInfo)
     this.disk()
   },
   destroyed() {
@@ -139,8 +144,7 @@ export default {
     },
   },
   beforeRouteEnter(to, from, next) {
-    console.log(to, from)
-    if (window.store.songInfo) {
+    if (localStorage.songInfo) {
       next()
     } else {
       next({

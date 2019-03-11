@@ -1,11 +1,11 @@
 <template>
   <div
-    v-if="$store.state.songInfo"
+    v-if="songInfo"
     class="img"
     @click="back"
   >
     <img
-      :src="$store.state.songInfo.al.picUrl"
+      :src="songInfo.al.picUrl"
       alt="stort"
     >
   </div>
@@ -24,6 +24,11 @@ export default {
     return {
       store: window.store,
     }
+  },
+  computed: {
+    songInfo() {
+      return this.$store.state.songInfo
+    },
   },
   methods: {
     back() {

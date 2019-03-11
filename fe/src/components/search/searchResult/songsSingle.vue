@@ -39,7 +39,7 @@
           <div>
             <p class="name">
               <span
-                v-if="store.songInfo && store.songInfo.id === item.id"
+                v-if="$store.state.songInfo && $store.state.songInfo.id === item.id"
                 class="iconfont icon-yinliang"
               />
               <span
@@ -120,7 +120,7 @@ export default {
     dblsong(item) {
       this.currentplay = item
       window.actions.play(item)
-      window.actions.songInfo(item)
+      this.$store.dispatch('songInfo', item)
     },
     // songHeight() {
     //   const song = this.$refs.song

@@ -47,6 +47,8 @@ window.actions = {
         const time = min + sec + msec
         return time
       }
+      // 没有音乐的歌词.不做切割处理
+      if (!res.lrc) return
       const lyric = res.lrc.lyric.split('\n')
       window.store.lrc.lyric = []
       lyric.forEach((ele) => {

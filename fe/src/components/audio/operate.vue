@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="store2.state.songInfo"
+    v-if="songInfo"
     class="info"
   >
     <div class="song">
@@ -8,20 +8,20 @@
         <span
           class="songname"
         >
-          {{ store2.state.songInfo.name }}
+          {{ songInfo.name }}
         </span>
         -
         <span class="name">
-          {{ store2.state.songInfo.ar[0].name }}
+          {{ songInfo.ar[0].name }}
         </span>
       </div>
       <div class="right">
         <span class="start">
-          {{ store2.state.songInfo.dt | curTime }}
+          {{ songInfo.dt | curTime }}
         </span>
         /
         <span class="end">
-          {{ store2.state.songInfo.dt | totalTime }}
+          {{ songInfo.dt | totalTime }}
         </span>
       </div>
     </div>
@@ -118,7 +118,6 @@ export default {
   data() {
     return {
       store: window.store,
-      store2: this.$store,
       wacthWidth: '',
       downX: '',
       currentTime: '',
@@ -126,6 +125,12 @@ export default {
       upPlay: true,
       event: {},
     }
+  },
+  computed: {
+    songInfo() {
+      console.log(this)
+      return this.$store.state.songInfo
+    },
   },
   mounted() {
     this.$refs.width.style.width = `${this.$refs.bur.offsetWidth - 20}px`
@@ -147,7 +152,7 @@ export default {
       this.downX = e.clientX - this.$refs.bur.getBoundingClientRect().left
       const width = (this.downX - this.$refs.dian.offsetWidth / 2) / this.$refs.width.offsetWidth
       this.$refs.wacth.style.width = `${width * 100}%`
-      this.store.audio.currentTime = width * this.store2.state.songInfo.dt / 1000
+      this.store.audio.currentTime = width * this.songInfo.dt / 1000
       document.addEventListener('mousemove', this.a)
       document.addEventListener('mouseup', this.b)
       if (e.target === this.$refs.dian) return
@@ -157,7 +162,7 @@ export default {
       this.upPlay = true
       const moveX = this.wacthWidth + (e.clientX - this.$refs.bur.getBoundingClientRect().left) - this.downX
       this.ratio = moveX / this.$refs.width.offsetWidth
-      this.store.audio.currentTime = this.ratio * this.store2.state.songInfo.dt / 1000
+      this.store.audio.currentTime = this.ratio * this.songInfo.dt / 1000
       this.store.audioData.width = `${this.ratio * 100}%`
       if (moveX >= this.$refs.width.offsetWidth) this.up()
     },
@@ -172,7 +177,7 @@ export default {
       this.store.audioData.curflag = true
       this.store.audioData.tabplay = false
       if (!this.store.audioData.src) {
-        window.actions.play(this.store2.state.songInfo, () => {
+        window.actions.play(this.songInfo, () => {
           // eslint-disable-next-line
           this.store.audioData.curflag = true
         })
@@ -184,7 +189,7 @@ export default {
       this.store.audioData.curflag = true
       this.store.audioData.tabplay = false
       if (!this.store.audioData.src) {
-        window.actions.play(this.store2.state.songInfo, () => {
+        window.actions.play(this.songInfo, () => {
           // eslint-disable-next-line
           this.store.audioData.curflag = true
           this.moveClient(e)
@@ -199,7 +204,7 @@ export default {
     moveClient(e) {
       if (!e) return
       const client = e.clientX - this.$refs.bur.getBoundingClientRect().left
-      this.store.audio.currentTime = (this.wacthWidth + (client - this.downX)) / this.$refs.width.offsetWidth * this.store2.state.songInfo.dt / 1000
+      this.store.audio.currentTime = (this.wacthWidth + (client - this.downX)) / this.$refs.width.offsetWidth * this.songInfo.dt / 1000
     },
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="store.storage.playList.length > 0 && store.songInfo"
+    v-if="playList.length > 0 && songInfo"
     class="caozuo"
   >
     <div class="like">
@@ -70,13 +70,13 @@
     >
       <div
         class="control-plays"
-        @click="playList"
+        @click="playListShow"
       >
         <span
           class="iconfont icon-liebiao"
         />
         <p class="length">
-          {{ store.storage.playList.length }}
+          {{ playList.length }}
         </p>
       </div>
       <div
@@ -110,10 +110,10 @@
           class="bottom"
         >
           <div
-            v-for="(item,index) of store.storage.playList"
+            v-for="(item,index) of playList"
             :key="item.id"
             class="item"
-            :class="{active:store.songInfo.id === item.id , click:currentTime === item}"
+            :class="{active:songInfo.id === item.id , click:currentTime === item}"
             @click="clicksong(item)"
             @dblclick="dblsong(item)"
           >
@@ -225,13 +225,13 @@
     >
       <div
         class="control-plays"
-        @click="playList"
+        @click="playListShow"
       >
         <span
           class="iconfont icon-liebiao"
         />
         <p class="length">
-          {{ store.storage.playList.length }}
+          {{ playList.length }}
         </p>
       </div>
       <div
@@ -297,6 +297,14 @@ export default {
       evend: null,
     }
   },
+  computed: {
+    playList() {
+      return this.$store.state.playList
+    },
+    songInfo() {
+      return this.$store.state.songInfo
+    },
+  },
   mounted() {
     this.wacthNull()
     document.addEventListener('mousemove', (e) => {
@@ -354,7 +362,7 @@ export default {
       this.store.audioData.volumeMove = false
     },
     // 切换播放列表
-    playList() {
+    playListShow() {
       this.playsbox = !this.playsbox
     },
     // 关闭播放列表
@@ -365,32 +373,32 @@ export default {
       this.currentTime = item
     },
     dblsong(item) {
-      if (!this.store.songInfo) return
+      if (!this.songInfo) return
       this.playTime = item
       window.actions.play(item)
-      window.actions.songInfo(item)
+      this.$store.dispatch('songInfo', item)
     },
     // 清除缓存
     clearSorage() {
       if (!window.confirm('确定要清空播放列表')) return
       localStorage.removeItem('playList')
       this.store.audio.pause()
-      this.store.storage.playList = []
-      this.store.songInfo = null
+      this.playList = []
+      this.songInfo = null
       localStorage.removeItem('songInfo')
       this.store.audio.src = ''
       this.store.audioData.tabplay = true
     },
     deleteStorage(item, i) {
       window.actions.playsDelete('plays', i)
-      if (item.id === this.store.songInfo.id) {
+      if (item.id === this.songInfo.id) {
         if (this.store.audioData.schema === 1) window.actions.next()
-        if (this.store.storage.playList.length > 0) {
-          window.actions.play(this.store.storage.playList[0])
-          window.actions.songInfo(this.store.storage.playList[0])
+        if (this.playList.length > 0) {
+          window.actions.play(this.playList[0])
+          window.actions.songInfo(this.playList[0])
         } else {
-          this.store.storage.playList = []
-          this.store.songInfo = null
+          this.playList = []
+          this.songInfo = null
           localStorage.removeItem('songInfo')
           this.store.audio.src = ''
           this.store.audioData.tabplay = true

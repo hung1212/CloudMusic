@@ -30,11 +30,11 @@ export default {
       window.actions.previous()
     },
     play() {
-      if (this.store.storage.playList.length === 0) return
+      if (this.$store.state.playList.length === 0) return
       if (this.store.audioData.tabplay) {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
         if (this.store.audioData.src) this.store.audio.play()
-        else window.actions.play(this.store.songInfo)
+        else window.actions.play(this.$store.state.songInfo)
       } else {
         this.store.audioData.tabplay = !this.store.audioData.tabplay
         this.store.lrc.diskFalse = false

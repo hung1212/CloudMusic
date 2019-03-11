@@ -214,9 +214,12 @@ export default {
         end,
       }
     },
+    songInfo() {
+      return this.$store.state.songInfo
+    },
   },
   watch: {
-    'store.songInfo': function () {
+    songInfo() {
       this.hotComment()
       this.comments(this.page)
     },
@@ -228,13 +231,13 @@ export default {
   methods: {
 
     hotComment() {
-      $.get('/comment/music', { id: this.store.songInfo.id }, (res) => {
+      $.get('/comment/music', { id: this.songInfo.id }, (res) => {
         this.hotCommentsData = res.hotComments
         if (this.hotCommentsData.length > 9) this.hotCommentsData.length = 10
       })
     },
     comments(page) {
-      $.get('/comment/music', { id: this.store.songInfo.id, limit: this.limit, offset: (page - 1) * this.limit }, (res) => {
+      $.get('/comment/music', { id: this.songInfo.id, limit: this.limit, offset: (page - 1) * this.limit }, (res) => {
         this.commentData = res
         this.totalPage = Math.ceil(res.total / this.limit)
         this.loading = false

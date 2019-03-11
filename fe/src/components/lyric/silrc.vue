@@ -48,8 +48,13 @@ export default {
       currentplay: null,
     }
   },
+  computed: {
+    songInfo() {
+      return this.$store.state.songInfo
+    },
+  },
   watch: {
-    'store.songInfo': function () {
+    songInfo() {
       this.silrc()
     },
   },
@@ -58,8 +63,8 @@ export default {
   },
   methods: {
     silrc() {
-      if (!this.store.songInfo) return
-      $.get('/simi/song', { id: this.store.songInfo.id }, (res) => {
+      if (!this.songInfo) return
+      $.get('/simi/song', { id: this.songInfo.id }, (res) => {
         this.siSong = res.songs
       })
     },
@@ -69,7 +74,7 @@ export default {
     dblsong(item) {
       this.currentplay = item
       window.actions.play(item)
-      window.actions.songInfo(item)
+      this.$store.dispatch('songInfo', item)
     },
   },
 }
