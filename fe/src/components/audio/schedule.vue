@@ -327,7 +327,7 @@ export default {
         window.alert('单曲循环')
       } else if (this.store.audioData.schema === 2) {
         this.store.audioData.schema += 1
-        window.alert('随机循环')
+        window.alert('随机播放')
       } else if (this.store.audioData.schema === 3) {
         this.store.audioData.schema += 1
         window.alert('顺序播放')

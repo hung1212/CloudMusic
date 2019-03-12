@@ -50,13 +50,8 @@ export default {
         })
       }
       if (this.store.audio.ended) {
-        if (this.store.audioData.schema === 2) {
-          this.store.audio.currentTime = 0
-          this.store.audio.play()
-        } else {
-          this.store.lrc.disk = false
-          window.actions.next()
-        }
+        this.store.lrc.disk = false
+        window.actions.switchMusic('selfMotion')
       }
     },
   },

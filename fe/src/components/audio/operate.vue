@@ -128,7 +128,6 @@ export default {
   },
   computed: {
     songInfo() {
-      console.log(this)
       return this.$store.state.songInfo
     },
   },

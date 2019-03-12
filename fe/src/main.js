@@ -12,6 +12,19 @@ import 'swiper/dist/css/swiper.css'
 // import 'font-awesome/scss/font-awesome.scss'
 window.$ = jquery
 window.alert = function alert(content) {
+  if (content === '随机播放') {
+    // 如果之前已经排好随机顺序,就不再重新排
+    if (store.state.playRandom.length > 0) return
+    const arr = [...store.state.playList]
+    store.state.playRandom = []
+    // store.state.playList.forEach((ele) => {
+    //   arr.push(ele)
+    // })
+    for (let i = 0; i < arr.length;) {
+      const randomIndex = Math.floor(Math.random() * arr.length)
+      store.state.playRandom.push(arr.splice(randomIndex, 1)[0])
+    }
+  }
   const div = document.createElement('div')
   div.innerHTML = content
   document.body.appendChild(div)
@@ -68,119 +81,84 @@ window.actions = {
     store.state.playList.splice(i, 1)
     localStorage.playList = JSON.stringify(store.state.playList)
   },
-  previous() {
-    let nextIndex = -1
-    if (window.store.audioData.schema === 1) { // 1是列表循环
-      store.state.playList.forEach((ele, i, arr) => {
-        if (ele.id === store.state.songInfo.id) {
-          if (i === 0) {
-            nextIndex = arr.length - 1
-            // window.actions.play(arr[arr.length - 1])
-            // store.dispatch('songInfo', (arr[arr.length - 1]))
-          } else {
-            nextIndex = i - 1
-            // window.actions.play(arr[i - 1])
-            // store.dispatch('songInfo', (arr[i - 1]))
-          }
-        }
-      })
-    } else if (window.store.audioData.schema === 2) { // 2是单曲播放
-    } else if (window.store.audioData.schema === 3) { // 3是随机播放
-      store.state.playList.forEach((ele, i, arr) => {
-        let ran = ''
-        function random() {
-          ran = Math.floor(Math.random() * arr.length)
-          if (i === ran) {
-            random()
-          }
-        }
-        if (ele.id === store.state.songInfo.id) {
-          random()
-          nextIndex = ran
+  switchMusic(type, order) {
+    /** type
+     *  'selfMotion'代表自动播放完的逻辑
+        'manual'代表手动切换的逻辑
+    */
+    /** order:type === 1时出现的参数
+        'previous' 点击上一首
+        'next' 点击下一首
+    */
 
-          // window.actions.play(arr[ran])
-          // store.dispatch('songInfo', (arr[ran]))
+    // 下一首播放的歌曲索引
+    let nextIndex = -1
+    // 当前歌曲的索引
+    let currentIndex = Number
+    // 播放列表的长度
+    const playListLength = store.state.playList.length
+    // 找出当前歌曲的索引
+    store.state.playList.forEach((ele, i) => {
+      if (ele.id === store.state.songInfo.id) {
+        currentIndex = i
+      }
+    })
+    // 获得当前播放歌曲的索引
+    function next(judge, assign, is) {
+      if (currentIndex === judge) {
+        nextIndex = assign
+      } else {
+        // is为Boolean类型
+        // ture === +
+        // false === -
+        nextIndex = is ? currentIndex + 1 : currentIndex - 1
+      }
+    }
+    // 手动切换播放歌曲
+    function swiper() {
+      if (order === 'previous') {
+        if (playListLength) {
+          next(0, playListLength - 1, false)
         }
-      })
-    } else if (window.store.audioData.schema === 4) { // 4是顺序播放
-      store.state.playList.forEach((ele, i, arr) => {
+      } else {
+        next(playListLength - 1, 0, true)
+      }
+    }
+    if (window.store.audioData.schema === 1) { // 1是列表循环
+      if (type === 'selfMotion') {
+        next(playListLength - 1, 0, true)
+      } else { swiper() }
+    } else if (window.store.audioData.schema === 2) { // 2是单曲播放
+      if (type === 'selfMotion') {
+        nextIndex = currentIndex
+      } else { swiper() }
+    } else if (window.store.audioData.schema === 3) { // 3是随机播放
+      store.state.playRandom.forEach((ele, i) => {
         if (ele.id === store.state.songInfo.id) {
-          if (arr.length - 1 === i) return
-          nextIndex = i + 1
-          // window.actions.play(arr[i + 1])
-          // store.dispatch('songInfo', (arr[i + 1]))
+          currentIndex = i
         }
       })
+      if (type === 'selfMotion') {
+        next(playListLength - 1, 0, true)
+      } else {
+        next(playListLength - 1, 0, true)
+      }
+      window.actions.play(store.state.playRandom[nextIndex])
+      store.dispatch('songInfo', store.state.playRandom[nextIndex])
+      nextIndex = -1
+    } else if (window.store.audioData.schema === 4) { // 4是顺序播放
+      if (type === 'selfMotion') {
+        if (playListLength - 1 === currentIndex) return
+        nextIndex = currentIndex + 1
+      } else {
+        swiper()
+      }
     }
     if (nextIndex !== -1) {
       window.actions.play(store.state.playList[nextIndex])
       store.dispatch('songInfo', store.state.playList[nextIndex])
     }
   },
-  next() {
-    let nextIndex = -1
-    if (window.store.audioData.schema === 1) { // 1是列表循环
-      console.log(Vue)
-      store.state.playList.forEach((ele, i, arr) => {
-        if (ele.id === store.state.songInfo.id) {
-          if (arr.length - 1 === i) {
-            nextIndex = 0
-            // window.actions.play(arr[0])
-            // store.dispatch('songInfo', (arr[0]))
-          } else {
-            window.actions.play(arr[i + 1])
-            store.dispatch('songInfo', (arr[i + 1]))
-          }
-        }
-      })
-    } else if (window.store.audioData.schema === 2) { // 2是单曲播放
-      store.state.playList.forEach((ele, i, arr) => {
-        if (ele.id === store.state.songInfo.id) {
-          if (i === 0) {
-            nextIndex = arr.length - 1
-            window.actions.play(arr[arr.length - 1])
-            store.dispatch('songInfo', (arr[arr.length - 1]))
-          } else {
-            window.actions.play(arr[i - 1])
-            store.dispatch('songInfo', (arr[i - 1]))
-          }
-        }
-      })
-    } else if (window.store.audioData.schema === 3) { // 3是随机播放
-      store.state.playList.forEach((ele, i, arr) => {
-        let ran = ''
-        function random() {
-          ran = Math.floor(Math.random() * arr.length)
-          if (i === ran) {
-            random()
-          }
-        }
-        if (ele.id === store.state.songInfo.id) {
-          nextIndex = ran
-          random()
-          // window.actions.play(arr[ran])
-          // store.dispatch('songInfo', (arr[ran]))
-        }
-      })
-    } else if (window.store.audioData.schema === 4) { // 4是顺序播放
-      store.state.playList.forEach((ele, i, arr) => {
-        if (ele.id === store.state.songInfo.id) {
-          if (arr.length - 1 === i) return
-          nextIndex = i + 1
-          // window.actions.play(arr[i + 1])
-          // store.dispatch('songInfo', (arr[i + 1]))
-        }
-      })
-    }
-    if (nextIndex !== -1) {
-      window.actions.play(store.state.playList[nextIndex])
-      store.dispatch('songInfo', store.state.playList[nextIndex])
-    }
-  },
-}
-
-window.mutations = {
-
 }
 
 window.store = {
@@ -206,9 +184,6 @@ window.store = {
     flagAudio: false,
     volumeMove: false,
     // playsbox: true,
-  },
-  storage: {
-    playList: [],
   },
   user: {
     profile: null,

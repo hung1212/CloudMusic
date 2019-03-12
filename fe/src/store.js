@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     songInfo: localStorage.songInfo ? JSON.parse(localStorage.songInfo) : {},
     playList: localStorage.playList ? JSON.parse(localStorage.playList) : [],
+    playRandom: [],
   },
   mutations: {
     setSongInfo(state, item) {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
       if (index === -1) {
         playList.unshift(state.songInfo)
         localStorage.playList = JSON.stringify(state.playList)
+        if (state.playRandom.length > 0) {
+          state.playRandom.unshift(state.songInfo)
+        }
       }
     },
   },

@@ -4,7 +4,7 @@
   >
     <span
       class="iconfont icon-48shangyishou qh"
-      @click="previous"
+      @click="manual('previous')"
     />
     <span
       class="iconfont cut-paly"
@@ -13,7 +13,7 @@
     />
     <span
       class="iconfont icon-048caozuo_xiayishou qh"
-      @click="next"
+      @click="manual('next')"
     />
   </div>
 </template>
@@ -26,9 +26,6 @@ export default {
     }
   },
   methods: {
-    previous() {
-      window.actions.previous()
-    },
     play() {
       if (this.$store.state.playList.length === 0) return
       if (this.store.audioData.tabplay) {
@@ -42,8 +39,8 @@ export default {
         this.store.audio.pause()
       }
     },
-    next() {
-      window.actions.next()
+    manual(order) {
+      window.actions.switchMusic('manual', order)
     },
   },
 }
