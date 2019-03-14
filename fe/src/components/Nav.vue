@@ -7,7 +7,7 @@
       <div class="shrink">
         <span class="iconfont icon-sanhengxian" />
       </div>
-      <div class="nav-box">
+      <div class="nav-box scrollbar">
         <div class="box1 box">
           <router-link to="/">
             <div
@@ -86,7 +86,7 @@
       <div class="shrink">
         <span class="iconfont icon-sanhengxian" />
       </div>
-      <div class="nav-box">
+      <div class="nav-box scrollbar">
         <div class="box1 box">
           <router-link to="/">
             <div

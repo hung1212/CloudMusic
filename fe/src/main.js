@@ -4,6 +4,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './filter'
 import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
 import './assets/less/pack.less'
@@ -11,20 +12,7 @@ import 'swiper/dist/css/swiper.css'
 // import VueRouter from 'vue-router'
 // import 'font-awesome/scss/font-awesome.scss'
 window.$ = jquery
-window.alert = function alert(content) {
-  if (content === '随机播放') {
-    // 如果之前已经排好随机顺序,就不再重新排
-    if (store.state.playRandom.length > 0) return
-    const arr = [...store.state.playList]
-    store.state.playRandom = []
-    // store.state.playList.forEach((ele) => {
-    //   arr.push(ele)
-    // })
-    for (let i = 0; i < arr.length;) {
-      const randomIndex = Math.floor(Math.random() * arr.length)
-      store.state.playRandom.push(arr.splice(randomIndex, 1)[0])
-    }
-  }
+window.playMode = function playMode(content) {
   const div = document.createElement('div')
   div.innerHTML = content
   document.body.appendChild(div)
@@ -34,6 +22,16 @@ window.alert = function alert(content) {
   setTimeout(() => {
     document.body.removeChild(div)
   }, 2000)
+  if (content === '随机播放') {
+    // 如果之前已经排好随机顺序,就不再重新排
+    if (store.state.playRandom.length > 0) return
+    const arr = [...store.state.playList]
+    store.state.playRandom = []
+    for (let i = 0; i < arr.length;) {
+      const randomIndex = Math.floor(Math.random() * arr.length)
+      store.state.playRandom.push(arr.splice(randomIndex, 1)[0])
+    }
+  }
 }
 window.actions = {
   play(item, cb) {

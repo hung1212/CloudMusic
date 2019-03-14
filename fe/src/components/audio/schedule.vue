@@ -140,7 +140,7 @@
               {{ item.ar[0].name }}
             </div>
             <div class="time">
-              {{ item.dt | totalTime }}
+              {{ item.dt | songInfo }}
             </div>
             <div class="clear">
               <span
@@ -277,14 +277,6 @@
 <script>
 export default {
   name: 'Schedule',
-  filters: {
-    totalTime(time) {
-      const store = (time / 1000)
-      const m = String(Math.floor((store / 60) / 10)) + String(Math.floor((store / 60) % 10))
-      const s = String(Math.floor((store % 60) / 10)) + String(Math.floor(store % 60 % 10))
-      return `${m}:${s}`
-    },
-  },
   data() {
     return {
       store: window.store,
@@ -320,46 +312,71 @@ export default {
     },
     volume() {
       this.volumeShow = !this.volumeShow
+      this.$nextTick(() => {
+        this.wacthWidth = localStorage.volume || this.$refs.wacth.offsetWidth
+      })
     },
     schema() {
       if (this.store.audioData.schema === 1) {
         this.store.audioData.schema += 1
-        window.alert('单曲循环')
+        window.playMode('单曲循环')
       } else if (this.store.audioData.schema === 2) {
         this.store.audioData.schema += 1
-        window.alert('随机播放')
+        window.playMode('随机播放')
       } else if (this.store.audioData.schema === 3) {
         this.store.audioData.schema += 1
-        window.alert('顺序播放')
+        window.playMode('顺序播放')
       } else if (this.store.audioData.schema === 4) {
         this.store.audioData.schema = 1
-        window.alert('列表循环')
+        window.playMode('列表循环')
       }
     },
     // // 操作音量
     down(e) {
-      this.wacthWidth = this.$refs.wacth.offsetWidth
+      // 点击了才可以移动圈圈
       this.store.audioData.volumeMove = true
-      this.downX = e.clientX - this.$refs.width.getBoundingClientRect().left
+      // 如果点击的是圈圈,就不改变位置
       if (e.target === this.$refs.dian) return
-      this.$refs.wacth.style.width = `${(this.downX - this.$refs.dian.offsetWidth / 2) / (this.$refs.wacthNull.offsetWidth) * 100}%`
-      this.store.audio.volume = this.downX / (this.$refs.width.offsetWidth
-      - this.$refs.dian.offsetWidth / 2 + this.$refs.dian.offsetWidth)
+      // 点击位置
+      this.downX = e.clientX - this.$refs.wacthNull.getBoundingClientRect().left
+      // 边界判断
+      if (this.downX > this.$refs.wacthNull.offsetWidth) {
+        this.$refs.wacth.style.width = `${100}%`
+      } else if (this.downX < this.$refs.dian.offsetWidth / 2) {
+        this.$refs.wacth.style.width = 0
+      } else {
+        // 点到那,音量大小的滑块就到哪
+        this.$refs.wacth.style.width = `${(this.downX - this.$refs.dian.offsetWidth / 2) / (this.$refs.wacthNull.offsetWidth) * 100}%`
+      }
+      // audio的音量大小
+      this.store.audio.volume = parseInt(this.$refs.wacth.style.width, 10) / 100
+      console.log(`滑块:${this.$refs.wacth.style.width},音量${this.store.audio.volume}`)
+      this.wacthWidth = this.$refs.wacth.offsetWidth
     },
     VOmove(e) {
+      // 没点击圈圈就不能移动
       if (!this.store.audioData.volumeMove) return
-      const moveX = e.clientX - this.$refs.width.getBoundingClientRect().left
-      let sum = (this.wacthWidth + (moveX - this.downX)) / (this.$refs.width.offsetWidth - 20)
+      // 移动的当前位置
+      const moveX = e.clientX - this.$refs.wacthNull.getBoundingClientRect().left
+      // 20是圈圈的宽度
+      let sum = (this.wacthWidth + (moveX - this.downX)) / (this.$refs.wacthNull.offsetWidth)
+      // 边界判断
       if (sum >= 1) {
         sum = 1
       } else if (sum <= 0) {
         sum = 0
       }
+      // 给滑动条和audio设置声音大小
       this.$refs.wacth.style.width = `${sum * 100}%`
+      // audio的音量(0~1)
       this.store.audio.volume = sum
+      console.log(`滑块:${this.$refs.wacth.style.width},音量${this.store.audio.volume}`)
     },
     VOup() {
+      // 松开鼠标,圈圈就不能移动
       this.store.audioData.volumeMove = false
+      // 音量大小滑动的宽度
+      this.wacthWidth = this.$refs.wacth.offsetWidth
     },
     // 切换播放列表
     playListShow() {

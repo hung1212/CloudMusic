@@ -1,11 +1,11 @@
 <template>
-  <div class="info-load">
+  <div class="info-load scrollbar">
     <div
       v-if="loading"
       class="loading"
     >
       <img
-        src="http://files.57gif.com/webgif/0/e/14/b6578a8f6e0aa313dd26b750e8dc0.gif"
+        :src="require('@/assets/images/load.gif')"
         alt="加载中"
       >
     </div>

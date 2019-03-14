@@ -15,7 +15,7 @@
           alt=""
         >
         <p class="play-count">
-          {{ item.playCount | ten }}
+          {{ item.playCount | playCount }}
         </p>
         <!-- <p class="duration"> {{ item.duration | comTime}}</p> -->
       </div>
@@ -38,12 +38,6 @@
 <script>
 export default {
   name: 'SongsMV',
-  filters: {
-    ten(value) {
-      if (value < 10000) return value
-      return `${Math.floor(value / 10000)}万`
-    },
-  },
   props: {
     result: Array,
   },

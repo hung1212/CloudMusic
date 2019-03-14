@@ -19,7 +19,7 @@
       class="loading"
     >
       <img
-        src="http://files.57gif.com/webgif/0/e/14/b6578a8f6e0aa313dd26b750e8dc0.gif"
+        :src="require('@/assets/images/load.gif')"
         alt="加载中"
       >
     </div>
@@ -130,7 +130,7 @@
               </div>
               <div class="view">
                 <div class="time">
-                  {{ item.time | time }}
+                  {{ item.time | createTime }}
                 </div>
                 <div class="view-righ">
                   <p class="good">
@@ -181,15 +181,6 @@
 <script>
 export default {
   name: 'Comment',
-  filters: {
-    time(value) {
-      const time = new Date(value)
-      const y = time.getFullYear()
-      const m = time.getMonth() + 1
-      const d = time.getDate()
-      return `${y}-${m}-${d}`
-    },
-  },
   data() {
     return {
       store: window.store,

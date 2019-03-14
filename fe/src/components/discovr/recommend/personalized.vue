@@ -46,13 +46,6 @@
 <script>
 export default {
   name: 'Personalized',
-  filters: {
-    playCount(value) {
-      if (value < 10000) return value
-      const sum = Math.floor(value / 10000)
-      return `${sum}万`
-    },
-  },
   data() {
     return {
       personalized: [],

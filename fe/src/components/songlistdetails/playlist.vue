@@ -52,13 +52,13 @@
           />
           <span class="iconfont icon-gengduosandian" />
           <p class="nickname">
-            {{ item.ar | itemNickname }}
+            {{ item.ar | artists }}
           </p>
           <p class="album">
-            哎的时刻自选辑
+            {{ item.al.name }}
           </p>
           <p class="time">
-            03:46
+            {{ item.dt | songTime }}
           </p>
         </li>
       </ul>
@@ -72,13 +72,6 @@ export default {
     itemIndex(i) {
       if (i > 9) return i
       return `0${String(i)}`
-    },
-    itemNickname(v) {
-      const arr = []
-      v.forEach((element) => {
-        arr.push(element.name)
-      })
-      return arr.join('/')
     },
   },
   props: {

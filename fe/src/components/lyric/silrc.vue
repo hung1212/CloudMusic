@@ -33,13 +33,6 @@
 <script>
 export default {
   name: 'Silrc',
-  filters: {
-    artists(value) {
-      if (value.length === 1) return value[0].name
-      if (value.length === 2) return `${value[0].name}/${value[1].name}`
-      return `${value[0].name}/${value[1].name}/...`
-    },
-  },
   data() {
     return {
       store: window.store,
@@ -58,7 +51,7 @@ export default {
       this.silrc()
     },
   },
-  mounted() {
+  created() {
     this.silrc()
   },
   methods: {

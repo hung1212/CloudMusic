@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="songInfo"
+    v-if="$store.state.playList.length > 0 && songInfo"
     class="img"
     @click="back"
   >
@@ -55,6 +55,9 @@ export default {
         height: 100%;
         width: 70px;
         padding: 3px;
+        &:hover{
+          opacity: 0.5
+        }
         img {
         width: 100%;
         height: 100%;

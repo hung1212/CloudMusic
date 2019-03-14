@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="songInfo"
+    v-if="$store.state.playList.length>0 && songInfo"
     class="info"
   >
     <div class="song">
@@ -21,7 +21,7 @@
         </span>
         /
         <span class="end">
-          {{ songInfo.dt | totalTime }}
+          {{ songInfo.dt | songTime }}
         </span>
       </div>
     </div>
@@ -108,17 +108,11 @@ export default {
       const s = String(Math.floor((store % 60) / 10)) + String(Math.floor(store % 60 % 10))
       return `${m}:${s}`
     },
-    totalTime(time) {
-      const store = (time / 1000)
-      const m = String(Math.floor((store / 60) / 10)) + String(Math.floor((store / 60) % 10))
-      const s = String(Math.floor((store % 60) / 10)) + String(Math.floor(store % 60 % 10))
-      return `${m}:${s}`
-    },
   },
   data() {
     return {
       store: window.store,
-      wacthWidth: '',
+      wacthWidth: 0,
       downX: '',
       currentTime: '',
       ratio: '',
@@ -132,7 +126,8 @@ export default {
     },
   },
   mounted() {
-    this.$refs.width.style.width = `${this.$refs.bur.offsetWidth - 20}px`
+    // 20是圈圈的宽度
+    this.$refs.width.style.width = `${this.$refs.width.offsetWidth - 20}px`
   },
   methods: {
     a(e) {
@@ -142,16 +137,18 @@ export default {
       this.up(e)
     },
     down(e) {
+      // 播放条不能移动
+      this.store.audioData.curflag = false
+      // 点击的位置
+      this.downX = e.clientX - this.$refs.bur.getBoundingClientRect().left
+      this.upPlay = false
+      const width = (this.downX - this.$refs.dian.offsetWidth / 2) / this.$refs.width.offsetWidth
+      this.$refs.wacth.style.width = `${width * 100}%`
+      this.store.audio.currentTime = width * this.songInfo.dt / 1000
       this.wacthWidth = parseInt(
         getComputedStyle(this.$refs.wacth, null).width,
         10,
       )
-      this.store.audioData.curflag = false
-      this.upPlay = false
-      this.downX = e.clientX - this.$refs.bur.getBoundingClientRect().left
-      const width = (this.downX - this.$refs.dian.offsetWidth / 2) / this.$refs.width.offsetWidth
-      this.$refs.wacth.style.width = `${width * 100}%`
-      this.store.audio.currentTime = width * this.songInfo.dt / 1000
       document.addEventListener('mousemove', this.a)
       document.addEventListener('mouseup', this.b)
       if (e.target === this.$refs.dian) return

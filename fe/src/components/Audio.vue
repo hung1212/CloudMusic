@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     changeTime() {
-      // 只要播放事件在改变,进度条就改变
+      // 点击圈圈时滚动条不动
       if (!window.store.audioData.curflag) return
       if (!this.$store.state.songInfo) return
       if (this.store.lrc.diskFalse) this.store.lrc.disk = true

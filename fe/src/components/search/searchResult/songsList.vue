@@ -7,6 +7,7 @@
       v-for="item of result"
       :key="item.id"
       class="item"
+      @click="$router.push({name:'SongListDetails',query:{id:item.id}})"
     >
       <div class="left">
         <img
@@ -26,7 +27,7 @@
           by <span>{{ item.creator.nickname }}</span>
         </p>
         <p class="play-count">
-          播放:<span>{{ item.playCount | ten }}</span>
+          播放:<span>{{ item.playCount | playCount }}</span>
         </p>
       </div>
     </div>
@@ -42,12 +43,6 @@
 <script>
 export default {
   name: 'SongsList',
-  filters: {
-    ten(value) {
-      if (value < 10000) return value
-      return `${Math.floor(value / 10000)}万`
-    },
-  },
   props: {
     result: Array,
   },

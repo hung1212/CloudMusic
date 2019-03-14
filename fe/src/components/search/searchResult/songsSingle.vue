@@ -79,16 +79,6 @@
 <script>
 export default {
   name: 'GongsSingle',
-  filters: {
-    songTime(time) {
-      const store = Math.floor(time / 1000)
-      const m = String(Math.floor(store / 60 / 10))
-        + String(Math.floor(store / 60) % 10)
-      const s = String(Math.floor((store % 60) / 10))
-        + String(Math.floor(store % 60) % 10)
-      return `${m}:${s}`
-    },
-  },
   props: {
     result: {
       type: Array,

@@ -26,7 +26,7 @@
           >
           <p class="w">
             <span class="iconfont icon-touyingyi" />
-            {{ item.playCount }}
+            {{ item.playCount | playCount }}
           </p>
         </div>
         <div class="name">

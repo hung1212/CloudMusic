@@ -110,22 +110,6 @@
 <script>
 export default {
   name: 'Info',
-  filters: {
-    playCount(count) {
-      if (count < 10000) return count
-      return `${Math.floor(count / 10000)}万`
-    },
-    createTime(t) {
-      function ten(v) {
-        if (v > 9) return v
-        return `0${String(v)}`
-      }
-      const y = new Date(t).getFullYear()
-      const m = ten(new Date(t).getMonth())
-      const d = ten(new Date(t).getDate())
-      return `${y}-${m}-${d}`
-    },
-  },
   props: {
     info: {
       type: Object,
