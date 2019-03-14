@@ -50,7 +50,7 @@
               </div>
               <div class="view">
                 <div class="time">
-                  {{ item.time | time }}
+                  {{ item.time | createTime }}
                 </div>
                 <div class="view-righ">
                   <p class="good">
@@ -98,7 +98,7 @@
               </div>
               <div class="view">
                 <div class="time">
-                  {{ item.time | time }}
+                  {{ item.time | createTime }}
                 </div>
                 <div class="view-righ">
                   <p class="good">

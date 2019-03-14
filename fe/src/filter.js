@@ -31,7 +31,7 @@ Vue.filter('createTime', (t) => {
     return `0${String(v)}`
   }
   const y = new Date(t).getFullYear()
-  const m = ten(new Date(t).getMonth())
+  const m = ten(new Date(t).getMonth() + 1)
   const d = ten(new Date(t).getDate())
   return `${y}-${m}-${d}`
 })

@@ -54,7 +54,7 @@
                 :key="index"
                 :class="{active:index === store.lrc.currentLrc.index}"
               >
-                {{ index }}:{{ value.lrc }}:{{ store.lrc.currentLrc.index }}
+                {{ value.lrc }}
               </p>
             </div>
           </div>
@@ -135,15 +135,6 @@ export default {
       }
     },
   },
-  // beforeRouteEnter(to, from, next) {
-  //   if (localStorage.songInfo) {
-  //     next()
-  //   } else {
-  //     next({
-  //       name: 'Search',
-  //     })
-  //   }
-  // },
 }
 </script>
 <style lang="less" scoped>
@@ -161,6 +152,7 @@ export default {
         background-size: cover;
         -webkit-filter:blur(120px);
         filter: blur(120px);
+        opacity: .8;
       }
     .top {
         width: 1000px;

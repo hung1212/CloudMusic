@@ -140,7 +140,7 @@
               {{ item.ar[0].name }}
             </div>
             <div class="time">
-              {{ item.dt | songInfo }}
+              {{ item.dt | songTime }}
             </div>
             <div class="clear">
               <span
@@ -313,7 +313,7 @@ export default {
     volume() {
       this.volumeShow = !this.volumeShow
       this.$nextTick(() => {
-        this.wacthWidth = localStorage.volume || this.$refs.wacth.offsetWidth
+        this.wacthWidth = this.$refs.wacth.offsetWidth
       })
     },
     schema() {
@@ -335,10 +335,10 @@ export default {
     down(e) {
       // 点击了才可以移动圈圈
       this.store.audioData.volumeMove = true
-      // 如果点击的是圈圈,就不改变位置
-      if (e.target === this.$refs.dian) return
       // 点击位置
       this.downX = e.clientX - this.$refs.wacthNull.getBoundingClientRect().left
+      // 如果点击的是圈圈,就不改变位置
+      if (e.target === this.$refs.dian) return
       // 边界判断
       if (this.downX > this.$refs.wacthNull.offsetWidth) {
         this.$refs.wacth.style.width = `${100}%`
@@ -359,13 +359,16 @@ export default {
       // 移动的当前位置
       const moveX = e.clientX - this.$refs.wacthNull.getBoundingClientRect().left
       // 20是圈圈的宽度
+
       let sum = (this.wacthWidth + (moveX - this.downX)) / (this.$refs.wacthNull.offsetWidth)
+      console.log(sum)
       // 边界判断
       if (sum >= 1) {
         sum = 1
       } else if (sum <= 0) {
         sum = 0
       }
+
       // 给滑动条和audio设置声音大小
       this.$refs.wacth.style.width = `${sum * 100}%`
       // audio的音量(0~1)
