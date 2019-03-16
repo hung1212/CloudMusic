@@ -31,6 +31,7 @@ export default {
   mounted() {
     const audio = document.createElement('audio')
     audio.addEventListener('timeupdate', this.changeTime)
+    audio.volume = localStorage.volume || 1
     this.store.audio = audio
     document.body.appendChild(audio)
   },

@@ -311,6 +311,7 @@ export default {
       this.$refs.wacthNull.style.width = `${252 - 20}px`
     },
     volume() {
+      this.$refs.wacth.style.width = `${this.store.audio.volume * 100}%`
       this.volumeShow = !this.volumeShow
       this.$nextTick(() => {
         this.wacthWidth = this.$refs.wacth.offsetWidth
@@ -350,6 +351,7 @@ export default {
       }
       // audio的音量大小
       this.store.audio.volume = parseInt(this.$refs.wacth.style.width, 10) / 100
+      localStorage.volume = this.store.audio.volume
       console.log(`滑块:${this.$refs.wacth.style.width},音量${this.store.audio.volume}`)
       this.wacthWidth = this.$refs.wacth.offsetWidth
     },
@@ -373,6 +375,7 @@ export default {
       this.$refs.wacth.style.width = `${sum * 100}%`
       // audio的音量(0~1)
       this.store.audio.volume = sum
+      localStorage.volume = this.store.audio.volume
       console.log(`滑块:${this.$refs.wacth.style.width},音量${this.store.audio.volume}`)
     },
     VOup() {

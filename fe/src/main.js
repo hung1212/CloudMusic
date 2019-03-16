@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import jquery from 'jquery'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -9,8 +10,8 @@ import './assets/iconfont/iconfont.css'
 import './assets/less/base.less'
 import './assets/less/pack.less'
 import 'swiper/dist/css/swiper.css'
-// import VueRouter from 'vue-router'
-// import 'font-awesome/scss/font-awesome.scss'
+// 使用axios
+Vue.prototype.$http = axios
 window.$ = jquery
 window.playMode = function playMode(content) {
   const div = document.createElement('div')

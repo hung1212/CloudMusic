@@ -69,6 +69,7 @@ export default {
         display: flex;
         flex-direction: column;
         flex: 1;
+        background:#fafafc;
         .main {
           display: flex;
           flex-direction: column;

@@ -52,6 +52,7 @@
               <p
                 v-for="(value , index) of store.lrc.lyric"
                 :key="index"
+                ref="currentLrc"
                 :class="{active:index === store.lrc.currentLrc.index}"
               >
                 {{ value.lrc }}
@@ -98,7 +99,7 @@ export default {
   watch: {
     // eslint-disable-next-line
     'store.lrc.currentLrc': function () {
-      this.$refs.lrc.scrollTop += 30
+      this.$refs.lrc.scrollTop = 40 * this.store.lrc.currentLrc.index - 160
     },
     // eslint-disable-next-line
     'store.audioData.tabplay': function () {
