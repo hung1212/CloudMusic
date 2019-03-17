@@ -4,12 +4,13 @@
       <div class="left">
         <p
           class="play-all"
+          @click="playTotal"
         >
           <span class="iconfont icon-bofang1" />
-          播放全部({{ playlist.length }})
+          播放全部({{ playList.length }})
         </p>
         <span class="x" />
-        <p><span class="iconfont icon-icon" /> 选择</p>
+        <!-- <p><span class="iconfont icon-icon" /> 选择</p> -->
       </div>
       <div class="search">
         <input
@@ -24,7 +25,7 @@
     <div class="content">
       <ul>
         <li
-          v-for="(item,index) of playlist"
+          v-for="(item,index) of playList"
           :key="item.id"
           :class="{active:currentItem === item , currentplay:currentplay === item}"
           @click="song(item,item.id)"
@@ -67,7 +68,7 @@
 </template>
 <script>
 export default {
-  name: 'Playlist',
+  name: 'PlayList',
   filters: {
     itemIndex(i) {
       if (i > 9) return i
@@ -75,7 +76,7 @@ export default {
     },
   },
   props: {
-    playlist: {
+    playList: {
       type: Array,
       default() {
         return []
@@ -95,9 +96,19 @@ export default {
     },
   },
   methods: {
+    // 播放全部
+    playTotal() {
+      this.$store.state.playList = this.playList
+      window.playMode('随机播放')
+      const random = Math.floor(Math.random())
+      console.log(this.$store.state.playList, random)
+      this.$store.dispatch('songInfo', this.$store.state.playList[random])
+    },
+    // 点击歌曲
     song(item) {
       this.currentItem = item
     },
+    // 双击歌曲
     dblsong(item) {
       this.currentplay = item
       window.actions.play(item)

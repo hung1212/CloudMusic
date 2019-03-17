@@ -14,7 +14,7 @@
       class="song-list-details"
     >
       <infos :info="info" />
-      <playlist :playlist="playlist" />
+      <playlist :play-list="playlist" />
     </div>
   </div>
 </template>
