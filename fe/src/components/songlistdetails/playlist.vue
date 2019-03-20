@@ -100,9 +100,10 @@ export default {
     playTotal() {
       this.$store.state.playList = this.playList
       window.playMode('随机播放')
-      const random = Math.floor(Math.random())
-      console.log(this.$store.state.playList, random)
+      const random = Math.floor(Math.random() * this.playList.length)
+      console.log(random)
       this.$store.dispatch('songInfo', this.$store.state.playList[random])
+      window.actions.play(this.$store.state.playList[random])
     },
     // 点击歌曲
     song(item) {
@@ -110,8 +111,10 @@ export default {
     },
     // 双击歌曲
     dblsong(item) {
+      this.$store.state.playList = this.playList
       this.currentplay = item
       window.actions.play(item)
+      console.log(item)
       this.$store.dispatch('songInfo', item)
     },
   },

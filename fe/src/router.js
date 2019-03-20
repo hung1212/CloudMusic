@@ -1,19 +1,34 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Search from './components/Search.vue'
-import Discovr from './components/Discovr.vue'
-import SongListDetails from './components/SongListDetails.vue'
-import Lyric from './components/Lyric.vue'
-import MV from './components/MV.vue'
-import Friend from './components/Friend.vue'
-import Local from './components/Local.vue'
-import Download from './components/Download.vue'
-import LyLate from './components/Lately.vue'
-import recommend from './components/discovr/Recommend.vue'
-import songList from './components/discovr/songList.vue'
-import Radios from './components/discovr/Radios.vue'
-import NewSong from './components/discovr/NewSong.vue'
-import singer from './components/discovr/singer.vue'
+// import Search from './components/Search.vue'
+// import Discovr from './components/Discovr.vue'
+// import SongListDetails from './components/SongListDetails.vue'
+// import Lyric from './components/Lyric.vue'
+// import MV from './components/MV.vue'
+// import Friend from './components/Friend.vue'
+// import Local from './components/Local.vue'
+// import Download from './components/Download.vue'
+// import LyLate from './components/Lately.vue'
+// import recommend from './components/discovr/Recommend.vue'
+// import songList from './components/discovr/songList.vue'
+// import Radios from './components/discovr/Radios.vue'
+// import NewSong from './components/discovr/NewSong.vue'
+// import singer from './components/discovr/singer.vue'
+
+const Search = () => import('./components/Search.vue')
+const Discovr = () => import('./components/Discovr.vue')
+const SongListDetails = () => import('./components/SongListDetails.vue')
+const Lyric = () => import('./components/Lyric.vue')
+const MV = () => import('./components/MV.vue')
+const Friend = () => import('./components/Friend.vue')
+const Local = () => import('./components/Local.vue')
+const Download = () => import('./components/Download.vue')
+const LyLate = () => import('./components/Lately.vue')
+const recommend = () => import('./components/discovr/Recommend.vue')
+const songList = () => import('./components/discovr/songList.vue')
+const Radios = () => import('./components/discovr/Radios.vue')
+const NewSong = () => import('./components/discovr/NewSong.vue')
+const singer = () => import('./components/discovr/singer.vue')
 
 Vue.use(VueRouter)
 

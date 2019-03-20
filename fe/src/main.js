@@ -91,6 +91,7 @@ window.actions = {
     */
 
     // 下一首播放的歌曲索引
+    console.log(type, order)
     let nextIndex = -1
     // 当前歌曲的索引
     let currentIndex = Number
@@ -98,8 +99,10 @@ window.actions = {
     const playListLength = store.state.playList.length
     // 找出当前歌曲的索引
     store.state.playList.forEach((ele, i) => {
+      console.log(store.state.songInfo.id)
       if (ele.id === store.state.songInfo.id) {
         currentIndex = i
+        console.log(currentIndex)
       }
     })
     // 获得当前播放歌曲的索引
@@ -154,6 +157,7 @@ window.actions = {
       }
     }
     if (nextIndex !== -1) {
+      console.log(store.state.playList[nextIndex])
       window.actions.play(store.state.playList[nextIndex])
       store.dispatch('songInfo', store.state.playList[nextIndex])
     }

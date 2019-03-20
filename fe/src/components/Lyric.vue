@@ -99,6 +99,7 @@ export default {
   watch: {
     // eslint-disable-next-line
     'store.lrc.currentLrc': function () {
+
       this.$refs.lrc.scrollTop = 40 * this.store.lrc.currentLrc.index - 160
     },
     // eslint-disable-next-line

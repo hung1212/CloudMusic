@@ -275,7 +275,10 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 export default {
+
   name: 'Schedule',
   data() {
     return {
@@ -290,12 +293,10 @@ export default {
     }
   },
   computed: {
-    playList() {
-      return this.$store.state.playList
-    },
-    songInfo() {
-      return this.$store.state.songInfo
-    },
+    ...mapState([
+      'songInfo',
+      'playList',
+    ]),
   },
   mounted() {
     this.wacthNull()
@@ -307,6 +308,14 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      'setSongInfo',
+      'asPlayList',
+      'asSongInfo',
+    ]),
+    // ...mapActions([
+    //   'songInfo',
+    // ]),
     wacthNull() {
       this.$refs.wacthNull.style.width = `${252 - 20}px`
     },
@@ -403,30 +412,29 @@ export default {
     },
     // 清除缓存
     clearSorage() {
+      console.log(this.playList)
       if (!window.confirm('确定要清空播放列表')) return
-      localStorage.removeItem('playList')
       this.store.audio.pause()
-      this.playList = []
-      this.songInfo = null
-      localStorage.removeItem('songInfo')
       this.store.audio.src = ''
       this.store.audioData.tabplay = true
+      this.asPlayList(false)
+      this.asSongInfo(false)
     },
     deleteStorage(item, i) {
-      window.actions.playsDelete('plays', i)
       if (item.id === this.songInfo.id) {
-        if (this.store.audioData.schema === 1) window.actions.next()
-        if (this.playList.length > 0) {
-          window.actions.play(this.playList[0])
-          window.actions.songInfo(this.playList[0])
+        console.log(this.store.audioData.schema)
+        if (this.playList.length > 1) {
+          if (this.store.audioData.schema === 1) window.actions.switchMusic('manual', 'next')
+          // window.actions.play(this.playList[0])
+          // this.$store.dispatch('songInfo', this.playList[0])
         } else {
-          this.playList = []
-          this.songInfo = null
-          localStorage.removeItem('songInfo')
+          this.asPlayList([])
+          this.asSongInfo(null)
           this.store.audio.src = ''
           this.store.audioData.tabplay = true
         }
       }
+      window.actions.playsDelete('plays', i)
     },
   },
 }
