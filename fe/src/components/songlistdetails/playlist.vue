@@ -101,7 +101,6 @@ export default {
       this.$store.state.playList = this.playList
       window.playMode('随机播放')
       const random = Math.floor(Math.random() * this.playList.length)
-      console.log(random)
       this.$store.dispatch('songInfo', this.$store.state.playList[random])
       window.actions.play(this.$store.state.playList[random])
     },
@@ -113,8 +112,9 @@ export default {
     dblsong(item) {
       this.$store.state.playList = this.playList
       this.currentplay = item
-      window.actions.play(item)
-      console.log(item)
+      this.$store.dispatch('checkMusic', item).then(() => {
+        window.actions.play(item)
+      })
       this.$store.dispatch('songInfo', item)
     },
   },

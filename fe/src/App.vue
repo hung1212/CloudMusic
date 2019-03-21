@@ -34,12 +34,12 @@ export default {
     .main {
       display: flex;
       flex-direction: column;
-      // width:1200px;
       // margin:0 auto;
       .top {
         display: flex;
         overflow: auto;
         height: calc(100vh - 70px);
+        min-width: 1200px;
       }
     }
 </style>

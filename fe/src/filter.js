@@ -11,6 +11,13 @@ Vue.filter('songTime', (time) => {
   return `${m}:${s}`
 })
 
+// 数字最小两位数
+Vue.filter('index', (value) => {
+  const shi = Math.floor(value / 10)
+  const yi = Math.floor(value % 10)
+  return String(shi) + String(yi)
+})
+
 // 计算播放次数
 Vue.filter('playCount', (value) => {
   if (value < 10000) return value

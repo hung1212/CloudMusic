@@ -20,6 +20,9 @@ const Discovr = () => import('./components/Discovr.vue')
 const SongListDetails = () => import('./components/SongListDetails.vue')
 const Lyric = () => import('./components/Lyric.vue')
 const MV = () => import('./components/MV.vue')
+const MVSift = () => import('./components/mv/sift.vue')
+const MVList = () => import('./components/mv/list.vue')
+const MVTotal = () => import('./components/mv/total.vue')
 const Friend = () => import('./components/Friend.vue')
 const Local = () => import('./components/Local.vue')
 const Download = () => import('./components/Download.vue')
@@ -80,6 +83,27 @@ export default new VueRouter({
       path: '/mv/',
       name: 'MV',
       component: MV,
+      children: [
+        {
+          path: '',
+          redirect: 'sift',
+        },
+        {
+          path: 'sift',
+          name: 'MVSift',
+          component: MVSift,
+        },
+        {
+          path: 'list',
+          name: 'MVList',
+          component: MVList,
+        },
+        {
+          path: 'total',
+          name: 'MVTotal',
+          component: MVTotal,
+        },
+      ],
     },
     {
       path: '/friend',

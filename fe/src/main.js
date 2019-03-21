@@ -13,6 +13,17 @@ import 'swiper/dist/css/swiper.css'
 // 使用axios
 Vue.prototype.$http = axios
 window.$ = jquery
+Vue.prototype.message = (content) => {
+  const div = document.createElement('div')
+  div.innerHTML = content
+  document.body.appendChild(div)
+  div.style.cssText = 'position: fixed;left:50%;top:50%;transform: translate(-50%,-50%);'
+  + 'background-color:#545454;font-size:20px;'
+  + 'color:#fff;padding:20px 100px;border-radius:10px'
+  setTimeout(() => {
+    document.body.removeChild(div)
+  }, 2000)
+}
 window.playMode = function playMode(content) {
   const div = document.createElement('div')
   div.innerHTML = content

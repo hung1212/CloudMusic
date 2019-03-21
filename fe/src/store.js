@@ -42,9 +42,28 @@ export default new Vuex.Store({
   },
   actions: {
     songInfo({ commit }, item) {
-      console.log(item)
       $.get('/song/detail', { ids: item.id }, (res) => {
         commit('setSongInfo', res.songs[0])
+      })
+    },
+    checkMusic({ context }, item) {
+      return new Promise(async (resolve) => {
+        resolve()
+        // Vue.prototype.$http.get('/check/music', {
+        //   params: {
+        //     id: item.id,
+        //   },
+        // }).then((res) => {
+        //   if (res.data.success) {
+        //     resolve(window.actions.play(item))
+        //   } else {
+        //     Vue.prototype.message(res.data.message)
+        //   }
+        // }).catch((error) => {
+        //   if (!error.response.data.success) {
+        //     Vue.prototype.message(error.response.data.message)
+        //   }
+        // })
       })
     },
   },

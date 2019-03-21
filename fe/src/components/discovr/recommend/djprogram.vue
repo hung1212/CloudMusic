@@ -18,6 +18,7 @@
         v-for="item of djprogram"
         :key="item.id"
         class="item"
+        @click="dbplay(item)"
       >
         <div class="img">
           <img
@@ -50,11 +51,24 @@ export default {
       djprogram: [],
     }
   },
-  mounted() {
-    $.get('/personalized/djprogram', (res) => {
-      if (res.code !== 200) return
-      this.djprogram = res.result
-    })
+  created() {
+    this.djprogramData()
+  },
+  methods: {
+    djprogramData() {
+      $.get('/personalized/djprogram', (res) => {
+        if (res.code !== 200) return
+        this.djprogram = res.result
+      })
+    },
+    async dbplay(item) {
+      const res = await this.$http.get('/song/url', {
+        params: {
+          id: item.id,
+        },
+      })
+      console.log(res)
+    },
   },
 }
 </script>
